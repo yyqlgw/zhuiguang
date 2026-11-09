@@ -1,0 +1,26 @@
+{
+  "name": "追光者 · 科技青年志",
+  "short_name": "追光者",
+  "description": "科技人物学习与打卡：人物卡牌、每日一学、答题、打卡",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0C1650",
+  "theme_color": "#0C1650",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
