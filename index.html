@@ -1033,6 +1033,10 @@ function openFocus(){
      back:wrap.querySelector('.fback'), ctx:null, raf:0, timer:0, hidden:false,
      ac:null, nodes:[], playing:-1, clicks:0};
   startStarfield(F);
+  // 预加载两段真实录音，避免第一次点「雨声/篝火」时还要等下载
+  ['rain.ogg','fire.ogg'].forEach(f=>{
+    try{ const pre=new Audio(); pre.preload='auto'; pre.src=f; pre.load(); }catch(e){}
+  });
   F.bar.querySelectorAll('.fchip').forEach(b=>{
     b.onclick=ev=>{ ev.stopPropagation(); toggleFocusNoise(+b.dataset.i); revealFocus(); };
   });
@@ -1125,11 +1129,21 @@ function toggleFocusNoise(i){
       const fallback=()=>{
         if(F && F.playing===i){ F.audio=null; F.nodes=[]; startSynth(i); }
       };
+      const start=()=>{
+        if(!F) return;
+        F.audio=a; F.playing=i; markChip(i);
+        const pr=a.play();
+        if(pr && pr.catch) pr.catch(fallback);
+      };
       a.addEventListener('error', fallback);
-      F.audio=a; F.playing=i;
-      markChip(i);
-      const pr=a.play();
-      if(pr && pr.catch) pr.catch(fallback);
+      if(a.readyState>=2){ start(); }
+      else{                            // 还没加载好：先提示，等 canplay 再播
+        toast('音频加载中…');
+        a.addEventListener('canplay', start, {once:true});
+        a.load();
+        // 4 秒还没就绪（网络太慢/格式不支持却未触发 error）→ 用合成声兜底
+        setTimeout(()=>{ if(F && F.playing!==i) fallback(); }, 4000);
+      }
       return;
     }catch(e){}
   }
