@@ -373,12 +373,7 @@ function wrongUpdate(k,ok){
   }
   S.wrongMeta[k]=m;
 }
-function reviewLabel(k){
-  const m=S.wrongMeta[k]; if(!m||!m.due) return '待复习';
-  const t=today();
-  if(m.due<=t) return '今天复习';
-  return m.due.slice(5).replace('-','/')+' 复习';
-}
+
 function fmtMin(sec){ const m=Math.round(sec/60);
   return m>=60?(Math.floor(m/60)+' 时 '+(m%60)+' 分'):(m+' 分钟'); }
 function allTotal(){ return Object.values(S.study).reduce((a,b)=>a+b,0); }
@@ -1008,9 +1003,9 @@ function unfavQuote(i){
 /* ---------- 专注学习模式：星空 + 白噪声 ---------- */
 const FOCUS_LABELS=['雨声','虫鸣','篝火','海浪','风声','溪流','远雷','雪夜','火车','钟摆'];
 const FOCUS_PRESET=[
-  {type:'bandpass',f:1400,q:0.7,g:0.55,file:'rain.mp3'},
+  {type:'highpass',f:520,g:0.52,drops:140,dropF:2400,dropL:0.16},
   {type:'bandpass',f:4600,q:6,g:0.30,lfo:4,lfog:0.5},
-  {type:'lowpass', f:620,g:0.60,file:'fire.mp3'},
+  {type:'lowpass', f:700,g:0.58,crackle:320,crackL:0.30},
   {type:'lowpass', f:520,g:0.62,lfo:0.08,lfog:0.35},
   {type:'bandpass',f:800,q:0.9,g:0.50,lfo:0.11,lfog:0.4},
   {type:'highpass',f:900,g:0.42},
@@ -1031,10 +1026,9 @@ function openFocus(){
   document.body.appendChild(wrap);
   F={wrap, canvas:wrap.querySelector('.fcv'), bar:wrap.querySelector('.fbar'),
      back:wrap.querySelector('.fback'), ctx:null, raf:0, timer:0, hidden:false,
-     ac:null, nodes:[], playing:-1, clicks:0};
+     ac:null, nodes:[], playing:-1};
   startStarfield(F);
-  // 只静默预取「雨声」（点篝火时再按需加载，避免一进来就拉两段音频）
-  try{ const pre=new Audio(); pre.preload='auto'; pre.src='rain.mp3'; pre.load(); }catch(e){}
+  // 全部音色实时合成，不下载任何音频文件
   F.bar.querySelectorAll('.fchip').forEach(b=>{
     b.onclick=ev=>{ ev.stopPropagation(); toggleFocusNoise(+b.dataset.i); revealFocus(); };
   });
@@ -1110,8 +1104,8 @@ function stopFocusNoise(){
   if(!F) return;
   F.nodes.forEach(n=>{ try{ n.stop&&n.stop(); n.disconnect&&n.disconnect(); }catch(e){} });
   F.nodes=[];
-  if(F.audio){ try{ F.audio.pause(); F.audio.currentTime=0; }catch(e){} F.audio=null; }
   if(F.clickTimer){ clearInterval(F.clickTimer); F.clickTimer=0; }
+  if(F.effectTimer){ clearInterval(F.effectTimer); F.effectTimer=0; }
   F.playing=-1;
   if(F.wrap) F.wrap.querySelectorAll('.fchip').forEach(b=>b.classList.remove('on'));
 }
@@ -1119,44 +1113,24 @@ function toggleFocusNoise(i){
   if(!F) return;
   if(F.playing===i){ stopFocusNoise(); return; }
   stopFocusNoise();
-  const p=FOCUS_PRESET[i];
-  if(p.file){                       // 真实录音（雨声 / 篝火）
-    try{
-      const a=new Audio(p.file);
-      a.loop=true; a.volume=0.7; a.preload='auto';
-      const fallback=()=>{
-        if(F && F.playing===i){ F.audio=null; F.nodes=[]; startSynth(i); }
-      };
-      const start=()=>{
-        if(!F) return;
-        F.audio=a; F.playing=i; markChip(i);
-        const pr=a.play();
-        if(pr && pr.catch) pr.catch(fallback);
-      };
-      a.addEventListener('error', fallback);
-      if(a.readyState>=2){ start(); }
-      else{                            // 还没加载好：显示进度，就绪后自动播放
-        const chip=F.wrap.querySelector('.fchip[data-i="'+i+'"]');
-        const label=FOCUS_LABELS[i];
-        if(chip) chip.textContent=label+' …';
-        a.addEventListener('progress', ev=>{
-          if(!chip || !F || F.playing===i) return;
-          if(ev.total){ chip.textContent=label+' '+(Math.min(99,Math.round(ev.loaded/ev.total*100)))+'%'; }
-          else { chip.textContent=label+' '+Math.round(ev.loaded/1024)+'K'; }
-        });
-        a.addEventListener('canplay', start, {once:true});
-        a.load();
-        // 4 秒还没就绪（网络太慢/格式不支持却未触发 error）→ 用合成声兜底
-        setTimeout(()=>{ if(F && F.playing!==i){ if(chip) chip.textContent=label; fallback(); } }, 4000);
-      }
-      return;
-    }catch(e){}
-  }
   startSynth(i);
 }
 function markChip(i){
   if(!F) return;
   F.wrap.querySelectorAll('.fchip').forEach(b=>b.classList.toggle('on', +b.dataset.i===i));
+}
+function focusBurst(freq, dur, level, q){
+  if(!F || !F.ac) return;
+  const ac=F.ac;
+  try{
+    const s=ac.createBufferSource(); s.buffer=F.noise;
+    const f=ac.createBiquadFilter(); f.type='bandpass'; f.frequency.value=freq; f.Q.value=q||1.2;
+    const g=ac.createGain(); const t=ac.currentTime;
+    g.gain.setValueAtTime(level,t);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    s.connect(f); f.connect(g); g.connect(ac.destination);
+    s.start(t, Math.random()*1.2, dur+0.02);
+  }catch(e){}
 }
 function startSynth(i){
   if(!F) return;
@@ -1176,7 +1150,6 @@ function startSynth(i){
     lo.connect(lg); lg.connect(g.gain); lo.start();
     F.nodes.push(lo,lg);
   }
-  if(p.click){}
   if(i===9){   // 钟摆：每 2 秒一记滴答
     F.clickTimer=setInterval(()=>{
       if(!F||!F.ac) return;
@@ -1188,6 +1161,21 @@ function startSynth(i){
       o.connect(gg); gg.connect(F.ac.destination);
       o.start(t); o.stop(t+0.06);
     },2000);
+  }
+  // 雨滴 / 火苗爆裂：随机短促脉冲，让合成声不那么"平"
+  if(p.drops || p.crackle){
+    const period=p.drops || p.crackle;
+    const baseF=p.drops ? p.dropF : 900;
+    const baseL=p.drops ? p.dropL : p.crackL;
+    F.effectTimer=setInterval(()=>{
+      if(!F || !F.ac) return;
+      if(Math.random()<0.78){
+        focusBurst(baseF*(0.7+Math.random()*0.9),
+          p.drops?0.05:0.07,
+          baseL*(0.55+Math.random()*0.7),
+          p.drops?1.2:2.6);
+      }
+    }, period);
   }
   F.playing=i;
   markChip(i);
@@ -1443,7 +1431,7 @@ stat('launch'); save();
 markOpen();
 
 /* ---------- 照片拆包：先渲染界面，照片后到再补渲染一次 ---------- */
-(function loadPhotos(){
+(function(){
   if(PHOTOS && Object.keys(PHOTOS).length) return;
   const s=document.createElement('script');
   s.src='photos.js'; s.async=true;
