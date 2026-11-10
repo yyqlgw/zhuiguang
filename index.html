@@ -1003,16 +1003,27 @@ function unfavQuote(i){
 /* ---------- 专注学习模式：星空 + 白噪声 ---------- */
 const FOCUS_LABELS=['雨声','虫鸣','篝火','海浪','风声','溪流','远雷','雪夜','火车','钟摆'];
 const FOCUS_PRESET=[
-  {type:'highpass',f:520,g:0.52,drops:140,dropF:2400,dropL:0.16},
-  {type:'bandpass',f:4600,q:6,g:0.30,lfo:4,lfog:0.5},
-  {type:'lowpass', f:700,g:0.58,crackle:320,crackL:0.30},
-  {type:'lowpass', f:520,g:0.62,lfo:0.08,lfog:0.35},
-  {type:'bandpass',f:800,q:0.9,g:0.50,lfo:0.11,lfog:0.4},
-  {type:'highpass',f:900,g:0.42},
-  {type:'lowpass', f:140,g:0.70,lfo:0.18,lfog:0.5},
-  {type:'lowpass', f:2600,g:0.12},
-  {type:'lowpass', f:400,g:0.50,lfo:1.6,lfog:0.45},
-  {type:'bandpass',f:1600,q:4,g:0.28,lfo:2,lfog:0.6}
+  // 雨：高通噪声打底 + 随机雨滴
+  {type:'highpass',f:900,g:0.26,drops:120,dropF:3000,dropL:0.09},
+  // 虫鸣：窄带高频 + 振幅调制
+  {type:'bandpass',f:4600,q:6,g:0.20,lfo:4,lfog:0.5},
+  // 篝火：低频底噪 + 中频火星 + 随机爆裂 + 偶发闷响
+  {type:'lowpass',f:320,g:0.24,f2:1100,type2:'bandpass',q2:1.4,g2:0.08,
+   crackle:240,crackL:0.14,thump:2300,thumpL:0.20},
+  // 海浪：低通 + 缓慢起伏
+  {type:'lowpass',f:520,g:0.42,lfo:0.08,lfog:0.35},
+  // 风声：带通 + 双调制
+  {type:'bandpass',f:800,q:0.9,g:0.34,lfo:0.11,lfog:0.4},
+  // 溪流：柔和带通 + 少量高频
+  {type:'bandpass',f:1500,q:0.6,g:0.15,f2:700,type2:'highpass',g2:0.04},
+  // 远雷：低频隆隆
+  {type:'lowpass',f:140,g:0.50,lfo:0.18,lfog:0.5},
+  // 雪夜：极轻
+  {type:'lowpass',f:2600,g:0.09},
+  // 火车：低频节奏
+  {type:'lowpass',f:400,g:0.36,lfo:1.6,lfog:0.45},
+  // 钟摆：窄带 + 滴答
+  {type:'bandpass',f:1600,q:4,g:0.18,lfo:2,lfog:0.6}
 ];
 let F=null;
 function openFocus(){
@@ -1106,6 +1117,7 @@ function stopFocusNoise(){
   F.nodes=[];
   if(F.clickTimer){ clearInterval(F.clickTimer); F.clickTimer=0; }
   if(F.effectTimer){ clearInterval(F.effectTimer); F.effectTimer=0; }
+  if(F.thumpTimer){ clearInterval(F.thumpTimer); F.thumpTimer=0; }
   F.playing=-1;
   if(F.wrap) F.wrap.querySelectorAll('.fchip').forEach(b=>b.classList.remove('on'));
 }
@@ -1119,64 +1131,89 @@ function markChip(i){
   if(!F) return;
   F.wrap.querySelectorAll('.fchip').forEach(b=>b.classList.toggle('on', +b.dataset.i===i));
 }
-function focusBurst(freq, dur, level, q){
+function focusBurst(freq, dur, level, q, type){
   if(!F || !F.ac) return;
   const ac=F.ac;
   try{
     const s=ac.createBufferSource(); s.buffer=F.noise;
-    const f=ac.createBiquadFilter(); f.type='bandpass'; f.frequency.value=freq; f.Q.value=q||1.2;
-    const g=ac.createGain(); const t=ac.currentTime;
-    g.gain.setValueAtTime(level,t);
-    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    const f=ac.createBiquadFilter();
+    f.type = type || 'bandpass';
+    f.frequency.value = freq;
+    f.Q.value = q || 1.2;
+    const g=ac.createGain(); const t0=ac.currentTime;
+    g.gain.setValueAtTime(level,t0);
+    g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
     s.connect(f); f.connect(g); g.connect(ac.destination);
-    s.start(t, Math.random()*1.2, dur+0.02);
+    s.start(t0, Math.random()*1.2, dur+0.02);
   }catch(e){}
 }
 function startSynth(i){
   if(!F) return;
   const ac=focusAC(); if(!ac) return;
   const p=FOCUS_PRESET[i];
-  const src=ac.createBufferSource(); src.buffer=F.noise; src.loop=true;
-  const flt=ac.createBiquadFilter(); flt.type=p.type; flt.frequency.value=p.f;
-  if(p.q) flt.Q.value=p.q;
-  const g=ac.createGain(); g.gain.value=p.g;
-  src.connect(flt); flt.connect(g); g.connect(ac.destination);
-  src.start();
-  F.nodes.push(src,g);
-  if(p.lfo){
-    const lo=ac.createOscillator(), lg=ac.createGain();
-    lo.frequency.value=p.lfo; lg.gain.value=(p.lfog||0.3)*p.g;
-    g.gain.value=p.g*0.6;
-    lo.connect(lg); lg.connect(g.gain); lo.start();
-    F.nodes.push(lo,lg);
+
+  function chain(type, freq, q, gain, lfoHz, lfoDepth){
+    const s=ac.createBufferSource(); s.buffer=F.noise; s.loop=true;
+    const f=ac.createBiquadFilter(); f.type=type; f.frequency.value=freq;
+    if(q) f.Q.value=q;
+    const g=ac.createGain(); g.gain.value=gain;
+    s.connect(f); f.connect(g); g.connect(ac.destination);
+    s.start();
+    F.nodes.push(s,g);
+    if(lfoHz){
+      const lo=ac.createOscillator(), lg=ac.createGain();
+      lo.frequency.value=lfoHz;
+      lg.gain.value=(lfoDepth||0.3)*gain;
+      g.gain.value=gain*0.6;
+      lo.connect(lg); lg.connect(g.gain); lo.start();
+      F.nodes.push(lo,lg);
+    }
   }
-  if(i===9){   // 钟摆：每 2 秒一记滴答
+
+  chain(p.type, p.f, p.q, p.g, p.lfo, p.lfog);
+  if(p.f2) chain(p.type2||'bandpass', p.f2, p.q2, p.g2||0.06, 0, 0);
+
+  // 钟摆：每 2 秒一记滴答
+  if(i===9){
     F.clickTimer=setInterval(()=>{
-      if(!F||!F.ac) return;
-      const t=F.ac.currentTime;
-      const o=F.ac.createOscillator(), gg=F.ac.createGain();
+      if(!F || !F.ac) return;
+      const a=F.ac, t0=a.currentTime;
+      const o=a.createOscillator(), gg=a.createGain();
       o.type='sine'; o.frequency.value=1600;
-      gg.gain.setValueAtTime(0.22,t);
-      gg.gain.exponentialRampToValueAtTime(0.0001,t+0.05);
-      o.connect(gg); gg.connect(F.ac.destination);
-      o.start(t); o.stop(t+0.06);
+      gg.gain.setValueAtTime(0.18,t0);
+      gg.gain.exponentialRampToValueAtTime(0.0001,t0+0.05);
+      o.connect(gg); gg.connect(a.destination);
+      o.start(t0); o.stop(t0+0.06);
     },2000);
   }
-  // 雨滴 / 火苗爆裂：随机短促脉冲，让合成声不那么"平"
+
+  // 雨滴 / 火星
   if(p.drops || p.crackle){
     const period=p.drops || p.crackle;
-    const baseF=p.drops ? p.dropF : 900;
+    const baseF=p.drops ? p.dropF : 2400;
     const baseL=p.drops ? p.dropL : p.crackL;
     F.effectTimer=setInterval(()=>{
       if(!F || !F.ac) return;
-      if(Math.random()<0.78){
-        focusBurst(baseF*(0.7+Math.random()*0.9),
-          p.drops?0.05:0.07,
-          baseL*(0.55+Math.random()*0.7),
-          p.drops?1.2:2.6);
+      if(Math.random()<0.75){
+        focusBurst(baseF*(0.55+Math.random()*1.1),
+          p.drops?0.05:0.03+Math.random()*0.03,
+          baseL*(0.4+Math.random()*0.8),
+          p.drops?1.2:2.2);
       }
     }, period);
   }
+
+  // 篝火：偶发低频闷响
+  if(p.thump){
+    F.thumpTimer=setInterval(()=>{
+      if(!F || !F.ac) return;
+      if(Math.random()<0.55){
+        focusBurst(90+Math.random()*40, 0.5+Math.random()*0.4,
+          p.thumpL*(0.5+Math.random()*0.6), 0.7, 'lowpass');
+      }
+    }, p.thump);
+  }
+
   F.playing=i;
   markChip(i);
 }

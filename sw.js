@@ -1,4 +1,4 @@
-const CACHE = 'zhuiguang-63b91fb31f';
+const CACHE = 'zhuiguang-0bf81d8c78';
 const ASSETS = ['./', './index.html', './photos.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 const isAudio = u => /\.mp3$/.test(new URL(u, self.location).pathname);
 self.addEventListener('install', e => {
