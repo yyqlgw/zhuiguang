@@ -1008,9 +1008,9 @@ function unfavQuote(i){
 /* ---------- 专注学习模式：星空 + 白噪声 ---------- */
 const FOCUS_LABELS=['雨声','虫鸣','篝火','海浪','风声','溪流','远雷','雪夜','火车','钟摆'];
 const FOCUS_PRESET=[
-  {type:'bandpass',f:1400,q:0.7,g:0.55,file:'rain.ogg'},
+  {type:'bandpass',f:1400,q:0.7,g:0.55,file:'rain.mp3'},
   {type:'bandpass',f:4600,q:6,g:0.30,lfo:4,lfog:0.5},
-  {type:'lowpass', f:620,g:0.60,file:'fire.ogg'},
+  {type:'lowpass', f:620,g:0.60,file:'fire.mp3'},
   {type:'lowpass', f:520,g:0.62,lfo:0.08,lfog:0.35},
   {type:'bandpass',f:800,q:0.9,g:0.50,lfo:0.11,lfog:0.4},
   {type:'highpass',f:900,g:0.42},
@@ -1033,10 +1033,8 @@ function openFocus(){
      back:wrap.querySelector('.fback'), ctx:null, raf:0, timer:0, hidden:false,
      ac:null, nodes:[], playing:-1, clicks:0};
   startStarfield(F);
-  // 预加载两段真实录音，避免第一次点「雨声/篝火」时还要等下载
-  ['rain.ogg','fire.ogg'].forEach(f=>{
-    try{ const pre=new Audio(); pre.preload='auto'; pre.src=f; pre.load(); }catch(e){}
-  });
+  // 只静默预取「雨声」（点篝火时再按需加载，避免一进来就拉两段音频）
+  try{ const pre=new Audio(); pre.preload='auto'; pre.src='rain.mp3'; pre.load(); }catch(e){}
   F.bar.querySelectorAll('.fchip').forEach(b=>{
     b.onclick=ev=>{ ev.stopPropagation(); toggleFocusNoise(+b.dataset.i); revealFocus(); };
   });
@@ -1137,12 +1135,19 @@ function toggleFocusNoise(i){
       };
       a.addEventListener('error', fallback);
       if(a.readyState>=2){ start(); }
-      else{                            // 还没加载好：先提示，等 canplay 再播
-        toast('音频加载中…');
+      else{                            // 还没加载好：显示进度，就绪后自动播放
+        const chip=F.wrap.querySelector('.fchip[data-i="'+i+'"]');
+        const label=FOCUS_LABELS[i];
+        if(chip) chip.textContent=label+' …';
+        a.addEventListener('progress', ev=>{
+          if(!chip || !F || F.playing===i) return;
+          if(ev.total){ chip.textContent=label+' '+(Math.min(99,Math.round(ev.loaded/ev.total*100)))+'%'; }
+          else { chip.textContent=label+' '+Math.round(ev.loaded/1024)+'K'; }
+        });
         a.addEventListener('canplay', start, {once:true});
         a.load();
         // 4 秒还没就绪（网络太慢/格式不支持却未触发 error）→ 用合成声兜底
-        setTimeout(()=>{ if(F && F.playing!==i) fallback(); }, 4000);
+        setTimeout(()=>{ if(F && F.playing!==i){ if(chip) chip.textContent=label; fallback(); } }, 4000);
       }
       return;
     }catch(e){}
