@@ -296,7 +296,7 @@ function badgeName(p){ p=p===undefined?S.points:p;
 function nextTh(p){ p=p===undefined?S.points:p;
   return p>=300?300:p>=150?300:p>=50?150:50; }
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
-function checkedToday(){ return !!S.days[today()]; }
+function checkedToday(){ return S.days[today()]!==undefined; }
 function addPoints(n){ S.points += n; }
 
 /* ---------- 提示 ---------- */
@@ -441,7 +441,7 @@ function pageCheckin(){
   const days=Object.keys(S.days).sort();
   const total=days.length;
   let streak=0; const d=new Date();
-  while(S.days[dayKey(d)]){ streak++; d.setDate(d.getDate()-1); }
+  while(S.days[dayKey(d)]!==undefined){ streak++; d.setDate(d.getDate()-1); }
   const mdays=days.filter(x=>x.startsWith(t.slice(0,7))).length;
   let longest=0,run=0,prev=null;
   days.forEach(x=>{ const dt=new Date(x+'T00:00:00');
@@ -474,7 +474,7 @@ function pageCheckin(){
 function makeupCandidates(){
   const out=[];
   for(let i=1;i<=3;i++){ const d=new Date(); d.setDate(d.getDate()-i);
-    const k=dayKey(d); if(!S.days[k]) out.push(k); }
+    const k=dayKey(d); if(S.days[k]===undefined) out.push(k); }
   return out;
 }
 function doCheckin(){
@@ -852,8 +852,8 @@ function openAbout(){
     </div>
     <div class="sec">更新记录</div>
     <div class="item mut">v5.0 Android 原生版<br>
-      v5.2 Web 版：题库扩到 150 题、错题按遗忘曲线复习、学习时长统计、全站搜索可看解析、每日提醒、首屏拆包加速<br>
-      v5.1 Web 版：iOS 适配（分享面板导出、跨天自动刷新、热力图可点、启动图）</div>
+      v5.1 Web 版：iOS 适配（分享面板导出、跨天自动刷新、热力图可点、启动图）<br>
+      v5.2 Web 版：题库扩到 150 题、错题按遗忘曲线复习、学习时长统计、全站搜索可看解析、每日提醒、首屏拆包加速</div>
     <button class="btn ghost" onclick="closeSheet()">知道了</button>`);
 }
 
