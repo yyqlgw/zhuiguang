@@ -755,7 +755,7 @@ function pageProfile(){
       <span class="mut">iOS / Safari 会清理长期不用的网站数据，建议现在导出一份备份。</span></div>`:''}
 
     <div style="margin-top:14px"><button class="btn ghost" onclick="openAbout()">关于 · 作者与声明</button></div>
-    <div class="foot">追光者 · 科技青年志 v5.2（Web 版）<br>作者：高乐文 · 长治学院 物理系 · 光电信息科学与工程<br>
+    <div class="foot">追光者 · 科技青年志 v5.3（Web 版）<br>作者：高乐文 · 长治学院 物理系 · 光电信息科学与工程<br>
       内容来源：人民日报、北大新闻网、中国科学报等公开报道</div>`;
 }
 /* ---------- 热力图 ---------- */
@@ -1248,7 +1248,8 @@ function openAbout(){
     <div class="sec">更新记录</div>
     <div class="item mut">v5.0 Android 原生版<br>
       v5.1 Web 版：iOS 适配（分享面板导出、跨天自动刷新、热力图可点、启动图）<br>
-      v5.2 Web 版：题库扩到 150 题、错题按遗忘曲线复习、学习时长统计、全站搜索可看解析、每日提醒、首屏拆包加速</div>
+      v5.2 Web 版：题库扩到 150 题、错题按遗忘曲线复习、学习时长统计、全站搜索可看解析、每日提醒、首屏拆包加速<br>
+      v5.3 Web 版：演示模式、清空本地数据、专注学习模式（星空+真实雨声/篝火）、答题音效与震动、自动备份、照片与启动图压缩</div>
     <button class="btn ghost" onclick="closeSheet()">知道了</button>`);
 }
 
@@ -1380,7 +1381,7 @@ function makeReport(){
     });
   }
   c.fillStyle='#9AA4B8'; c.font='26px sans-serif';
-  c.fillText('生成于 '+today()+' · 追光者 v5.2 Web',60,1560);
+  c.fillText('生成于 '+today()+' · 追光者 v5.3 Web',60,1560);
   downloadCanvas(cv,'追光者学习报告_'+today()+'.png');
 }
 
