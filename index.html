@@ -159,6 +159,9 @@ input,textarea,.item,.mut,.foot,.q,.exp{-webkit-user-select:text;user-select:tex
 .foot{text-align:center;color:var(--sub);font-size:.66em;line-height:1.9;padding:14px 0 4px}
 .bannerT{background:linear-gradient(135deg,#2B5CE6,#4C7BFF);color:#fff;border-radius:14px;
   padding:11px 14px;font-size:.8em;margin-bottom:12px;box-shadow:0 6px 18px rgba(43,92,230,.25)}
+.sheetBack{display:inline-flex;align-items:center;gap:4px;font-size:.86em;font-weight:600;
+  color:var(--primary);padding:4px 12px 8px 0;margin-bottom:4px;user-select:none}
+.sheetBack:active{opacity:.55}
 .barRow{display:flex;align-items:flex-end;gap:6px;height:78px;padding:6px 2px 0}
 .barCol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px}
 .barCol i{display:block;width:100%;border-radius:6px;background:var(--line);transition:height .25s}
@@ -377,6 +380,7 @@ function openPerson(i){
   const p=DATA.people[i], ph=PHOTOS[p.name], favKey='p:'+p.name;
   const faved=S.fav.includes(favKey);
   openSheet(`
+    <div class="sheetBack" onclick="closeSheet()">‹ 返回</div>
     <div style="height:180px;border-radius:18px;overflow:hidden;background:linear-gradient(135deg,#2A44A8,#5C87FF);
                 display:flex;align-items:center;justify-content:center;margin-bottom:14px">
       ${ph?`<img src="${ph}" style="width:100%;height:100%;object-fit:cover;object-position:center 22%">`
@@ -575,7 +579,8 @@ function pageProfile(){
     ${heatLegend()}
 
     <div class="sec">我的收藏 ${S.fav.length}</div>
-    ${S.fav.length?S.fav.map(k=>`<div class="item">${k.startsWith('p:')?'人物 · '+esc(k.slice(2)):esc(k)}</div>`).join(''):'<div class="item mut">还没有收藏，去人物详情点「收藏」。</div>'}
+    ${S.fav.length?S.fav.map((k,i)=>`<div class="item" onclick="openFav(${i})">
+      ${k.startsWith('p:')?'人物 · '+esc(k.slice(2)):esc(k)}<div class="mut">点开看详情</div></div>`).join(''):'<div class="item mut">还没有收藏，去人物详情点「收藏」。</div>'}
 
     <div class="sec">我的打卡心得</div>
     ${Object.keys(S.days).sort().reverse().filter(d=>S.days[d]).slice(0,10).map(d=>
@@ -802,6 +807,37 @@ function finishChallenge(){
     <div class="row" style="margin-top:14px">
       <button class="btn ghost" onclick="closeSheet();render()">完成</button>
       <button class="btn" onclick="closeSheet();startChallenge()">再来一局</button></div>`);
+}
+
+/* ---------- 收藏项：点开看详情（不再一点就取消收藏） ---------- */
+function openFav(i){
+  const k=S.fav[i]; if(!k) return;
+  if(k.startsWith('p:')){
+    const name=k.slice(2);
+    const idx=DATA.people.findIndex(p=>p.name===name);
+    if(idx>=0){ openPerson(idx); return; }
+    toast('没找到这位人物，内容可能已更新'); return;
+  }
+  const text=k.startsWith('q:')?k.slice(2):k;
+  const q=DATA.quotes.find(x=>x.text===text);
+  if(q){
+    openSheet(`<h2>${esc(q.author)}</h2>
+      <div class="q">${esc(q.text)}</div>
+      <div class="mut">${esc(q.note||'')}</div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn ghost" onclick="unfavQuote(${i})">取消收藏</button>
+        <button class="btn" onclick="closeSheet()">关闭</button></div>`);
+    return;
+  }
+  openSheet(`<h2>收藏的语录</h2>
+    <div class="q">${esc(text)}</div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn ghost" onclick="unfavQuote(${i})">取消收藏</button>
+      <button class="btn" onclick="closeSheet()">关闭</button></div>`);
+}
+function unfavQuote(i){
+  const k=S.fav[i]; if(!k) return;
+  S.fav=S.fav.filter(x=>x!==k); save(); closeSheet(); render(); toast('已取消收藏');
 }
 
 /* ---------- 搜索 ---------- */
