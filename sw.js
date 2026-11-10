@@ -1,5 +1,5 @@
-const CACHE = 'zhuiguang-d9f093a169';
-const ASSETS = ['./', './index.html', './photos.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
+const CACHE = 'zhuiguang-77466ed9c8';
+const ASSETS = ['./', './index.html', './photos.js', './rain.ogg', './fire.ogg', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });

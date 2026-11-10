@@ -169,6 +169,18 @@ input,textarea,.item,.mut,.foot,.q,.exp{-webkit-user-select:text;user-select:tex
 .barCol span{font-size:.6em;color:var(--sub)}
 body.dark .barCol i{background:#2A3346}
 body.dark .barCol i.on{background:linear-gradient(180deg,#4265CC,#7FA0FF)}
+.focus{position:fixed;inset:0;z-index:130;background:#05070f;overflow:hidden}
+.focus canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.fback{position:absolute;left:16px;top:calc(env(safe-area-inset-top) + 16px);z-index:2;
+  padding:9px 16px;border-radius:22px;background:rgba(255,255,255,.18);color:#fff;
+  font-size:.9em;transition:opacity .3s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.fbar{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 24px);z-index:2;
+  transition:opacity .3s}
+.fchips{display:flex;gap:8px;overflow-x:auto;padding:6px 16px;scrollbar-width:none}
+.fchips::-webkit-scrollbar{display:none}
+.fchip{flex:0 0 auto;padding:9px 18px;border-radius:20px;border:0;font-size:.85em;
+  background:rgba(255,255,255,.16);color:#E8ECF8;font-family:inherit;white-space:nowrap}
+.fchip.on{background:#E8F0FF;color:#1B2A5E;font-weight:700}
 </style>
 </head>
 <body>
@@ -196,15 +208,149 @@ DATA.quiz.forEach(q=>{ q.cat = categoryOf(q.q); });
 
 /* ---------- 状态 ---------- */
 const KEY='zhuiguang_web_v1';
+const BAK=KEY+'_bak';
 function blank(){ return {points:0,days:{},read:[],wrong:[],wrongMeta:{},fav:[],salt:0,
   daily:{},cat:{},wrongrun:{},person:{},challenge:{},study:{},stats:{},remind:{on:0,min:1200},
   ui:{font:0,dark:0}}; }
 let S;
-function load(){ try{ S = JSON.parse(localStorage.getItem(KEY)) || blank(); }catch(e){ S=blank(); }
+let DEMO=null;                 // 演示模式的数据只放在内存里，不落盘
+function isDemo(){ return DEMO!==null; }
+function load(){
+  let raw=null;
+  try{ raw = localStorage.getItem(KEY); }catch(e){}
+  try{ S = JSON.parse(raw) || blank(); }catch(e){ S=blank(); }
+  if(!raw){                       // 主键丢了：尝试用自动备份恢复
+    try{ const b=JSON.parse(localStorage.getItem(BAK)); if(b) S=b; }catch(e){}
+  }
   for(const k in blank()) if(S[k]===undefined) S[k]=blank()[k];
-  if(!S.salt){ S.salt = 100000 + Math.floor(Math.random()*900000); save(); } }
-function save(){ localStorage.setItem(KEY, JSON.stringify(S)); }
+  if(!S.salt){ S.salt = 100000 + Math.floor(Math.random()*900000); save(); }
+}
+/** 记录打开时间并算出"多久没打开"（定义在工具函数之后调用，避免 TDZ）。 */
+function markOpen(){
+  const t=today();
+  const prev=S.meta && S.meta.lastOpen;
+  S.meta=S.meta||{};
+  S.meta.gap = prev ? Math.round((Date.parse(t)-Date.parse(prev))/864e5) : 0;
+  S.meta.lastOpen=t;
+  save();
+}
+function save(){
+  if(DEMO) return;                 // 演示模式改动只留在内存
+  try{
+    const js=JSON.stringify(S);
+    localStorage.setItem(KEY, js);
+    localStorage.setItem(BAK, js);  // 自动备份一份，主键损坏时可恢复
+  }catch(e){}
+}
 load();
+
+/* ---------- 演示模式 ---------- */
+function demoSeed(){
+  const d=blank();
+  d.points=186;
+  d.stats={launch:23,answered:168,export:2};
+  const c=new Date();
+  [1,2,4,5,6].forEach(b=>{ const x=new Date(c); x.setDate(x.getDate()-b); d.days[dayKey(x)]=''; });
+  d.days[dayKey(new Date(c.getTime()-864e5))]='读完黄芊芊的故事，第一次知道 17 岁可以离科研这么近。';
+  d.read=['黄芊芊','徐颖','桂海潮','陈蕾','苏权科'];
+  d.fav=['p:黄芊芊'];
+  d.study[dayKey(c)]=45*60;
+  d.study[dayKey(new Date(c.getTime()-864e5))]=32*60;
+  d.wrong=[DATA.quiz[0].q, DATA.quiz[1].q];
+  d.wrongMeta[DATA.quiz[0].q]={lv:1,due:today()};
+  d.wrongMeta[DATA.quiz[1].q]={lv:0,due:today()};
+  d.salt=888888;
+  return d;
+}
+function enterDemo(){
+  if(isDemo()) return;
+  DEMO=S; S=demoSeed(); render();
+  toast('已进入演示模式：真实数据未改动');
+}
+function exitDemo(){
+  if(!isDemo()) return;
+  S=DEMO; DEMO=null; render();
+  toast('已退出演示模式，数据已恢复');
+}
+let demoTaps=0, demoTapAt=0;
+function onUsageTap(){
+  if(isDemo()) return;
+  const now=Date.now();
+  if(now-demoTapAt>1500) demoTaps=0;
+  demoTapAt=now; demoTaps++;
+  if(demoTaps>=5){ demoTaps=0; enterDemo(); }
+  else if(demoTaps===4) toast('再点一次进入演示模式');
+}
+
+/* ---------- 清空本地数据（两步确认） ---------- */
+function askClearAll(){
+  if(isDemo()){ toast('演示模式下不执行清空，请先退出演示'); return; }
+  openSheet(`<h2>清空本地数据</h2>
+    <div class="item">会删除本机上的全部学习记录：积分、打卡、心得、错题、收藏、学习时长、设置。<br>此操作不可撤销。</div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn ghost" onclick="closeSheet()">取消</button>
+      <button class="btn" onclick="askClearAll2()">继续</button></div>`);
+}
+function askClearAll2(){
+  openSheet(`<h2>最后确认</h2>
+    <div class="item">再次确认：清空后所有数据无法恢复，也不会自动备份。</div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn ghost" onclick="closeSheet()">算了</button>
+      <button class="btn" onclick="doClearAll()">确认清空</button></div>`);
+}
+function doClearAll(){
+  try{ localStorage.removeItem(KEY); localStorage.removeItem(BAK); }catch(e){}
+  S=blank(); save(); closeSheet(); render(); toast('已清空本地数据');
+}
+
+/* ---------- 答题反馈：答对短音、答错微震 ---------- */
+let _ac=null;
+function beep(ok){
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) return;
+    _ac=_ac||new AC();
+    const o=_ac.createOscillator(), g=_ac.createGain();
+    o.type='sine'; o.frequency.value = ok?880:220;
+    o.connect(g); g.connect(_ac.destination);
+    const t=_ac.currentTime;
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(ok?0.16:0.09, t+0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+(ok?0.2:0.14));
+    o.start(t); o.stop(t+(ok?0.22:0.16));
+  }catch(e){}
+}
+function haptic(){ try{ if(navigator.vibrate) navigator.vibrate(35); }catch(e){} }
+
+/* ---------- 题库预览 / 教程（演示模式用） ---------- */
+function openQuizPreview(){
+  const q=DATA.quiz, n=q.length;
+  let i=0;
+  function paint(){
+    const x=q[i];
+    const opts=x.options.map((o,k)=>
+      `<div class="opt" style="pointer-events:none;${k===x.answer?'border-color:#8FD3A3;background:#E6F6EC':''}">
+        ${'ABC'[k]}　${esc(o)}${k===x.answer?'　✔':''}</div>`).join('');
+    openSheet(`<h2>题库预览 ${i+1}/${n}</h2>
+      <div class="q">${esc(x.q)}</div>${opts}
+      <div class="exp">${esc(x.explain||'')}</div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn ghost" onclick="closeSheet()">关闭</button>
+        <button class="btn ghost" onclick="const e=window.__pq;e(-1)">上一题</button>
+        <button class="btn" onclick="const e=window.__pq;e(1)">下一题</button></div>`);
+  }
+  window.__pq = d => { i=(i+d+n)%n; paint(); };
+  paint();
+}
+function openTutorial(){
+  openSheet(`<h2>教程</h2>
+    <div class="item"><b>① 三个核心动作</b><br>左右滑人物卡认识 12 位青年科学家；每日一学每天换 3 条知识与名言；打卡记一笔，可写心得、可补签。</div>
+    <div class="item" style="margin-top:8px"><b>② 怎么得分</b><br>阅读 +2、答对 +2、打卡 +10、补签 −20。每日一测每天一次；每个分类每天首局计分；错题本每天首局计分；限时挑战前 3 局计分。</div>
+    <div class="item" style="margin-top:8px"><b>③ 错题怎么复习</b><br>按 1 / 3 / 7 / 15 天排队重练，连对 4 次自动移出错题本。</div>
+    <div class="item" style="margin-top:8px"><b>④ 演示模式</b><br>用一份独立的示例数据，怎么点都不影响真实记录；退出或关掉页面即恢复。</div>
+    <div class="item" style="margin-top:8px"><b>⑤ 数据在哪</b><br>只存在这台设备的浏览器里，不上传服务器。建议每周导出一次备份。</div>
+    <button class="btn" style="margin-top:12px" onclick="closeSheet()">知道了</button>`);
+}
 
 /* ---------- 学习时长 / 错题复习 / 使用统计 ---------- */
 function addStudy(sec){ if(sec<=0) return; const k=today();
@@ -349,6 +495,7 @@ function render(){
     html=`<div class="bannerT" onclick="show(2)">今天还没打卡 · 点这里去打卡 →</div>`+html;
   m.innerHTML=html;
   m.scrollTop=0;
+  if(app.tab===3) setTimeout(updateStoreInfo, 30);
   if(app.tab===0) centerFirstCard();
 }
 function centerFirstCard(){
@@ -512,12 +659,20 @@ function pageProfile(){
   const pct=maxed?100:Math.min(100,Math.round(p*100/nt));
   const qs=S.daily[today()];
   const wrongN=S.wrong.length;
+  const demoBar = isDemo() ? `<div class="item" style="border-color:#FFD8A8;background:#FFF4E5">
+      <b style="color:#8A5A00">演示模式 · 真实数据已隔离</b><br>
+      <span class="mut" style="color:#A07028">现在看到的是示例数据，退出后原样恢复；关掉页面也会退出演示。</span>
+      <div class="row" style="margin-top:10px">
+        <button class="btn ghost" onclick="openQuizPreview()">题库预览</button>
+        <button class="btn ghost" onclick="openTutorial()">教程</button>
+        <button class="btn" onclick="exitDemo()">退出演示</button>
+      </div></div>` : '';
   const cats=CAT_NAMES.map((n,i)=>{
     const done=S.cat[today()+'_'+i]!==undefined;
     return `<button class="btn ${done?'gray':'ghost'}" style="font-size:.78em;padding:12px 4px"
       onclick="startQuiz('cat',${i})">${n}${done?' 已练':''}</button>`; }).join('');
   const chN=S.challenge[today()]||0;
-  return `<div class="hero">
+  return `${demoBar}<div class="hero">
       <span class="badge">${badgeName()}</span>
       <div class="num">${p}<small>分</small></div>
       <div class="bar"><i style="width:${pct}%"></i></div>
@@ -587,8 +742,17 @@ function pageProfile(){
       `<div class="item">${esc(S.days[d])}<div class="mut">${d}</div></div>`).join('')||'<div class="item mut">还没有写过心得。</div>'}
 
     <div class="sec">使用统计</div>
-    <div class="item">累计启动 ${S.stats.launch||0} 次 · 累计答题 ${S.stats.answered||0} 道<br>
-      累计打卡 ${Object.keys(S.days).length} 天 · 导出 ${S.stats.export||0} 次</div>
+    <div class="item" onclick="onUsageTap()">累计启动 ${S.stats.launch||0} 次 · 累计答题 ${S.stats.answered||0} 道<br>
+      累计打卡 ${Object.keys(S.days).length} 天 · 导出 ${S.stats.export||0} 次<br>
+      <span class="mut" id="storeInfo">本机存储占用计算中…</span></div>
+
+    <div class="row" style="margin-top:14px">
+      <button class="btn ghost" onclick="openFocus()">专注学习模式 · 星空</button>
+      <button class="btn ghost" onclick="askClearAll()">清空本地数据</button>
+    </div>
+    ${(S.meta&&S.meta.gap>=5)?`<div class="item" style="margin-top:12px;border-color:#FFD8A8;background:#FFF8EC">
+      <b>已经 ${S.meta.gap} 天没打开了</b><br>
+      <span class="mut">iOS / Safari 会清理长期不用的网站数据，建议现在导出一份备份。</span></div>`:''}
 
     <div style="margin-top:14px"><button class="btn ghost" onclick="openAbout()">关于 · 作者与声明</button></div>
     <div class="foot">追光者 · 科技青年志 v5.2（Web 版）<br>作者：高乐文 · 长治学院 物理系 · 光电信息科学与工程<br>
@@ -718,6 +882,7 @@ function answerQuiz(i){
   else if(!S.wrong.includes(q.q)) S.wrong.push(q.q);
   if(QZ.mode==='wrong') wrongUpdate(q.q, ok);
   stat('answered');
+  if(ok) beep(true); else { beep(false); haptic(); }
   document.getElementById('o'+q.answer).classList.add('ok');
   if(!ok) document.getElementById('o'+i).classList.add('no');
   const noPts=quizNoPoints();
@@ -838,6 +1003,186 @@ function openFav(i){
 function unfavQuote(i){
   const k=S.fav[i]; if(!k) return;
   S.fav=S.fav.filter(x=>x!==k); save(); closeSheet(); render(); toast('已取消收藏');
+}
+
+/* ---------- 专注学习模式：星空 + 白噪声 ---------- */
+const FOCUS_LABELS=['雨声','虫鸣','篝火','海浪','风声','溪流','远雷','雪夜','火车','钟摆'];
+const FOCUS_PRESET=[
+  {type:'bandpass',f:1400,q:0.7,g:0.55,file:'rain.ogg'},
+  {type:'bandpass',f:4600,q:6,g:0.30,lfo:4,lfog:0.5},
+  {type:'lowpass', f:620,g:0.60,file:'fire.ogg'},
+  {type:'lowpass', f:520,g:0.62,lfo:0.08,lfog:0.35},
+  {type:'bandpass',f:800,q:0.9,g:0.50,lfo:0.11,lfog:0.4},
+  {type:'highpass',f:900,g:0.42},
+  {type:'lowpass', f:140,g:0.70,lfo:0.18,lfog:0.5},
+  {type:'lowpass', f:2600,g:0.12},
+  {type:'lowpass', f:400,g:0.50,lfo:1.6,lfog:0.45},
+  {type:'bandpass',f:1600,q:4,g:0.28,lfo:2,lfog:0.6}
+];
+let F=null;
+function openFocus(){
+  if(F) return;
+  const wrap=document.createElement('div');
+  wrap.className='focus';
+  wrap.innerHTML=`<canvas class="fcv"></canvas>
+    <div class="fback">‹ 返回</div>
+    <div class="fbar"><div class="fchips">${FOCUS_LABELS.map((n,i)=>
+      `<button class="fchip" data-i="${i}">${n}</button>`).join('')}</div></div>`;
+  document.body.appendChild(wrap);
+  F={wrap, canvas:wrap.querySelector('.fcv'), bar:wrap.querySelector('.fbar'),
+     back:wrap.querySelector('.fback'), ctx:null, raf:0, timer:0, hidden:false,
+     ac:null, nodes:[], playing:-1, clicks:0};
+  startStarfield(F);
+  F.bar.querySelectorAll('.fchip').forEach(b=>{
+    b.onclick=ev=>{ ev.stopPropagation(); toggleFocusNoise(+b.dataset.i); revealFocus(); };
+  });
+  F.back.onclick=ev=>{ ev.stopPropagation(); closeFocus(); };
+  wrap.onclick=()=>revealFocus();
+  revealFocus();
+}
+function revealFocus(){
+  if(!F) return;
+  F.hidden=false;
+  F.bar.style.opacity='1'; F.back.style.opacity='1';
+  clearTimeout(F.timer);
+  F.timer=setTimeout(()=>{
+    if(!F) return;
+    F.hidden=true;
+    F.bar.style.opacity='0'; F.back.style.opacity='0';
+  },10000);
+}
+function closeFocus(){
+  if(!F) return;
+  clearTimeout(F.timer);
+  cancelAnimationFrame(F.raf);
+  stopFocusNoise();
+  if(F.ac){ try{ F.ac.close(); }catch(e){} }
+  F.wrap.remove(); F=null;
+}
+function startStarfield(f){
+  const cv=f.canvas, dpr=Math.min(2,window.devicePixelRatio||1);
+  function size(){
+    cv.width=cv.clientWidth*dpr; cv.height=cv.clientHeight*dpr;
+    f.ctx=cv.getContext('2d'); f.ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  size();
+  window.addEventListener('resize',size);
+  const stars=[];
+  for(let i=0;i<60;i++) stars.push({x:Math.random(),y:Math.random(),
+    r:0.6+Math.random()*1.6, ph:Math.random()*6.28, sp:0.35+Math.random()*1.1,
+    a:0.32+Math.random()*0.62});
+  let last=0;
+  function loop(t){
+    if(!F) return;
+    f.raf=requestAnimationFrame(loop);
+    if(t-last<33) return;
+    last=t;
+    const w=cv.clientWidth, h=cv.clientHeight, c=f.ctx;
+    const gr=c.createLinearGradient(0,0,w,h);
+    gr.addColorStop(0,'#0B1633'); gr.addColorStop(0.6,'#070D1C'); gr.addColorStop(1,'#03050B');
+    c.fillStyle=gr; c.fillRect(0,0,w,h);
+    const tt=t/1000;
+    for(const s of stars){
+      const a=s.a*(0.55+0.45*Math.sin(tt*s.sp+s.ph));
+      c.beginPath(); c.arc(s.x*w, s.y*h, s.r, 0, 6.2832);
+      c.fillStyle='rgba(255,255,255,'+a.toFixed(3)+')'; c.fill();
+    }
+  }
+  f.raf=requestAnimationFrame(loop);
+}
+function focusAC(){
+  if(!F.ac){
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) return null;
+    F.ac=new AC();
+    const len=F.ac.sampleRate*2;
+    const buf=F.ac.createBuffer(1,len,F.ac.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<len;i++) d[i]=Math.random()*2-1;
+    F.noise=buf;
+  }
+  if(F.ac.state==='suspended') F.ac.resume();
+  return F.ac;
+}
+function stopFocusNoise(){
+  if(!F) return;
+  F.nodes.forEach(n=>{ try{ n.stop&&n.stop(); n.disconnect&&n.disconnect(); }catch(e){} });
+  F.nodes=[];
+  if(F.audio){ try{ F.audio.pause(); F.audio.currentTime=0; }catch(e){} F.audio=null; }
+  if(F.clickTimer){ clearInterval(F.clickTimer); F.clickTimer=0; }
+  F.playing=-1;
+  if(F.wrap) F.wrap.querySelectorAll('.fchip').forEach(b=>b.classList.remove('on'));
+}
+function toggleFocusNoise(i){
+  if(!F) return;
+  if(F.playing===i){ stopFocusNoise(); return; }
+  stopFocusNoise();
+  const p=FOCUS_PRESET[i];
+  if(p.file){                       // 真实录音（雨声 / 篝火）
+    try{
+      const a=new Audio(p.file);
+      a.loop=true; a.volume=0.7; a.preload='auto';
+      const fallback=()=>{
+        if(F && F.playing===i){ F.audio=null; F.nodes=[]; startSynth(i); }
+      };
+      a.addEventListener('error', fallback);
+      F.audio=a; F.playing=i;
+      markChip(i);
+      const pr=a.play();
+      if(pr && pr.catch) pr.catch(fallback);
+      return;
+    }catch(e){}
+  }
+  startSynth(i);
+}
+function markChip(i){
+  if(!F) return;
+  F.wrap.querySelectorAll('.fchip').forEach(b=>b.classList.toggle('on', +b.dataset.i===i));
+}
+function startSynth(i){
+  if(!F) return;
+  const ac=focusAC(); if(!ac) return;
+  const p=FOCUS_PRESET[i];
+  const src=ac.createBufferSource(); src.buffer=F.noise; src.loop=true;
+  const flt=ac.createBiquadFilter(); flt.type=p.type; flt.frequency.value=p.f;
+  if(p.q) flt.Q.value=p.q;
+  const g=ac.createGain(); g.gain.value=p.g;
+  src.connect(flt); flt.connect(g); g.connect(ac.destination);
+  src.start();
+  F.nodes.push(src,g);
+  if(p.lfo){
+    const lo=ac.createOscillator(), lg=ac.createGain();
+    lo.frequency.value=p.lfo; lg.gain.value=(p.lfog||0.3)*p.g;
+    g.gain.value=p.g*0.6;
+    lo.connect(lg); lg.connect(g.gain); lo.start();
+    F.nodes.push(lo,lg);
+  }
+  if(p.click){}
+  if(i===9){   // 钟摆：每 2 秒一记滴答
+    F.clickTimer=setInterval(()=>{
+      if(!F||!F.ac) return;
+      const t=F.ac.currentTime;
+      const o=F.ac.createOscillator(), gg=F.ac.createGain();
+      o.type='sine'; o.frequency.value=1600;
+      gg.gain.setValueAtTime(0.22,t);
+      gg.gain.exponentialRampToValueAtTime(0.0001,t+0.05);
+      o.connect(gg); gg.connect(F.ac.destination);
+      o.start(t); o.stop(t+0.06);
+    },2000);
+  }
+  F.playing=i;
+  markChip(i);
+}
+function updateStoreInfo(){
+  const el=document.getElementById('storeInfo'); if(!el) return;
+  try{
+    const kb=Math.round((localStorage.getItem(KEY)||'').length/1024);
+    if(navigator.storage && navigator.storage.estimate){
+      navigator.storage.estimate().then(e=>{
+        el.textContent='数据约 '+kb+' KB · 站点缓存约 '+Math.round((e.usage||0)/1048576*10)/10+' MB（自动备份已开启）';
+      }).catch(()=>{ el.textContent='数据约 '+kb+' KB（自动备份已开启）'; });
+    } else el.textContent='数据约 '+kb+' KB（自动备份已开启）';
+  }catch(e){}
 }
 
 /* ---------- 搜索 ---------- */
@@ -1075,6 +1420,7 @@ setInterval(function(){
 }, 60000);
 studyStart();
 stat('launch'); save();
+markOpen();
 
 /* ---------- 照片拆包：先渲染界面，照片后到再补渲染一次 ---------- */
 (function loadPhotos(){
