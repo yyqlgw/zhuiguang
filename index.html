@@ -181,6 +181,13 @@ body.dark .barCol i.on{background:linear-gradient(180deg,#4265CC,#7FA0FF)}
 .fchip{flex:0 0 auto;padding:9px 18px;border-radius:20px;border:0;font-size:.85em;
   background:rgba(255,255,255,.16);color:#E8ECF8;font-family:inherit;white-space:nowrap}
 .fchip.on{background:#E8F0FF;color:#1B2A5E;font-weight:700}
+.achWrap{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ach{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px 12px;
+  border-radius:14px;background:var(--card);border:1px solid var(--line);opacity:.62}
+.ach.on{opacity:1;border-color:#9BB6FF;box-shadow:0 4px 14px rgba(43,92,230,.12)}
+.ach .ic{font-size:1.15em;color:var(--primary)}
+.ach b{font-size:.8em;color:var(--text);font-weight:600}
+.ach i{font-style:normal;font-size:.68em;color:var(--sub)}
 </style>
 </head>
 <body>
@@ -211,7 +218,7 @@ const KEY='zhuiguang_web_v1';
 const BAK=KEY+'_bak';
 function blank(){ return {points:0,days:{},read:[],wrong:[],wrongMeta:{},fav:[],salt:0,
   daily:{},cat:{},wrongrun:{},person:{},challenge:{},study:{},stats:{},remind:{on:0,min:1200},
-  ui:{font:0,dark:0}}; }
+  ach:[],ui:{font:0,dark:0}}; }
 let S;
 let DEMO=null;                 // 演示模式的数据只放在内存里，不落盘
 function isDemo(){ return DEMO!==null; }
@@ -357,6 +364,61 @@ function addStudy(sec){ if(sec<=0) return; const k=today();
   S.study[k]=(S.study[k]||0)+Math.round(sec); }
 function studyMin(k){ return Math.round((S.study[k]||0)/60); }
 function stat(key){ S.stats[key]=(S.stats[key]||0)+1; }
+const ACHIEVEMENTS=[
+  {id:'first_checkin', name:'初识追光', icon:'✧', desc:'完成第一次打卡', need:1, cur:()=>Object.keys(S.days).length},
+  {id:'week_streak',   name:'七日之约', icon:'☀', desc:'连续打卡 7 天', need:7, cur:()=>streakDays()},
+  {id:'month_checkin', name:'月度守望', icon:'☾', desc:'累计打卡 30 天', need:30, cur:()=>Object.keys(S.days).length},
+  {id:'all_people',    name:'十二星辰', icon:'✦', desc:'读完全部 12 位人物', need:DATA.people.length, cur:()=>S.read.length},
+  {id:'quiz_150',      name:'百题斩',   icon:'⚔', desc:'累计答题 150 道', need:150, cur:()=>S.stats.answered||0},
+  {id:'daily_full',    name:'满分时刻', icon:'❖', desc:'每日一测拿到 3/3', need:3, cur:()=>bestDaily()},
+  {id:'wrong_clear',   name:'错题克星', icon:'✎', desc:'错题重练一局 3 题全对', need:3, cur:()=>bestWrongRun()},
+  {id:'challenge_ace', name:'挑战达人', icon:'⚡', desc:'限时挑战单局 10 分以上', need:10, cur:()=>S.stats.chBest||0},
+  {id:'notes_5',       name:'笔耕不辍', icon:'✉', desc:'写下 5 条打卡心得', need:5, cur:()=>noteCount()},
+  {id:'study_5h',      name:'专注时光', icon:'♫', desc:'累计学习满 5 小时', need:18000, cur:()=>studyTotal()}
+];
+function streakDays(){
+  let n=0; const d=new Date();
+  while(S.days[dayKey(d)]!==undefined){ n++; d.setDate(d.getDate()-1); }
+  return n;
+}
+function bestDaily(){ let m=0; for(const k in S.daily){ if(S.daily[k]>m) m=S.daily[k]; } return m; }
+function bestWrongRun(){ let m=0; for(const k in S.wrongrun){ if(S.wrongrun[k]>m) m=S.wrongrun[k]; } return m; }
+function noteCount(){ let n=0; for(const k in S.days){ if(S.days[k] && String(S.days[k]).trim()) n++; } return n; }
+function studyTotal(){ let s=0; for(const k in S.study){ s+=S.study[k]||0; } return s; }
+function achDone(a){ return a.cur() >= a.need; }
+function achText(a){
+  const cur=a.cur();
+  if(a.id==='study_5h') return cur>=a.need?'已达成':(Math.round(cur/60)+'/'+Math.round(a.need/60)+' 分钟');
+  return cur>=a.need?'已达成':(Math.min(cur,a.need)+'/'+a.need);
+}
+function achCount(){ return ACHIEVEMENTS.filter(achDone).length; }
+function checkAchievements(){
+  if(isDemo()) return;
+  const got=ACHIEVEMENTS.filter(achDone).map(a=>a.id);
+  const fresh=got.filter(id=>!(S.ach||[]).includes(id));
+  if(fresh.length){
+    const names=fresh.map(id=>ACHIEVEMENTS.find(a=>a.id===id).name);
+    S.ach=got; save();
+    toast(fresh.length===1?('解锁成就：'+names[0]):('解锁 '+fresh.length+' 个成就：'+names.join('、')));
+  } else if((S.ach||[]).length!==got.length){ S.ach=got; save(); }
+}
+function openAch(id){
+  const a=ACHIEVEMENTS.find(x=>x.id===id); if(!a) return;
+  const done=achDone(a);
+  openSheet(`<h2>${a.icon} ${esc(a.name)}</h2>
+    <div class="item">${esc(a.desc)}<div class="mut" style="margin-top:6px">进度：${achText(a)}</div></div>
+    <div class="mut" style="margin-top:8px">${done?'已达成 ✓':'还没达成，继续加油'}</div>
+    <button class="btn" style="margin-top:14px" onclick="closeSheet()">知道了</button>`);
+}
+function achGrid(){
+  const n=achCount();
+  return '<div class="achWrap">' + ACHIEVEMENTS.map(a=>{
+    const done=achDone(a);
+    return `<div class="ach ${done?'on':''}" onclick="openAch('${a.id}')">
+      <span class="ic">${a.icon}</span><b>${esc(a.name)}</b><i>${achText(a)}</i></div>`;
+  }).join('') + '</div>'
+  + `<div class="mut" style="margin-top:6px">已解锁 ${n} / ${ACHIEVEMENTS.length}</div>`;
+}
 const REVIEW_GAP=[1,3,7,15];
 function wrongDue(k){ const m=S.wrongMeta[k]; return (m&&m.due)?m.due:today(); }
 function dueWrong(){ const t=today(); return S.wrong.filter(k=>wrongDue(k)<=t); }
@@ -741,6 +803,9 @@ function pageProfile(){
       累计打卡 ${Object.keys(S.days).length} 天 · 导出 ${S.stats.export||0} 次<br>
       <span class="mut" id="storeInfo">本机存储占用计算中…</span></div>
 
+    <div class="sec">成就徽章</div>
+    ${achGrid()}
+
     <div class="row" style="margin-top:14px">
       <button class="btn ghost" onclick="openFocus()">专注学习模式 · 星空</button>
       <button class="btn ghost" onclick="askClearAll()">清空本地数据</button>
@@ -750,7 +815,7 @@ function pageProfile(){
       <span class="mut">iOS / Safari 会清理长期不用的网站数据，建议现在导出一份备份。</span></div>`:''}
 
     <div style="margin-top:14px"><button class="btn ghost" onclick="openAbout()">关于 · 作者与声明</button></div>
-    <div class="foot">追光者 · 科技青年志 v5.3（Web 版）<br>作者：高乐文 · 长治学院 物理系 · 光电信息科学与工程<br>
+    <div class="foot">追光者 · 科技青年志 v5.4（Web 版）<br>作者：高乐文 · 长治学院 物理系 · 光电信息科学与工程<br>
       内容来源：人民日报、北大新闻网、中国科学报等公开报道</div>`;
 }
 /* ---------- 热力图 ---------- */
@@ -959,6 +1024,7 @@ function finishChallenge(){
   const t=today(); const n=S.challenge[t]||0;
   let gained=0, counted=false;
   if(n<3){ S.challenge[t]=n+1; gained=CH.score*2; addPoints(gained); counted=true; }
+  S.stats.chBest=Math.max(S.stats.chBest||0, CH.score);
   save();
   openSheet(`<div class="result"><b>${CH.score}</b>
       <span>${CH.score>=15?'追光如飞':(CH.score>=8?'表现不错':'再练练手')}</span></div>
@@ -1279,7 +1345,8 @@ function openAbout(){
     <div class="item mut">v5.0 Android 原生版<br>
       v5.1 Web 版：iOS 适配（分享面板导出、跨天自动刷新、热力图可点、启动图）<br>
       v5.2 Web 版：题库扩到 150 题、错题按遗忘曲线复习、学习时长统计、全站搜索可看解析、每日提醒、首屏拆包加速<br>
-      v5.3 Web 版：演示模式、清空本地数据、专注学习模式（星空+10 种实时合成白噪声）、答题音效与震动、自动备份、照片与启动图压缩</div>
+      v5.3 Web 版：演示模式、清空本地数据、专注学习模式（星空+10 种实时合成白噪声）、答题音效与震动、自动备份、照片与启动图压缩<br>
+      v5.4 Web 版：成就徽章系统（10 个徽章与进度）、挑战最高分记录</div>
     <button class="btn ghost" onclick="closeSheet()">知道了</button>`);
 }
 
@@ -1411,7 +1478,7 @@ function makeReport(){
     });
   }
   c.fillStyle='#9AA4B8'; c.font='26px sans-serif';
-  c.fillText('生成于 '+today()+' · 追光者 v5.3 Web',60,1560);
+  c.fillText('生成于 '+today()+' · 追光者 v5.4 Web',60,1560);
   downloadCanvas(cv,'追光者学习报告_'+today()+'.png');
 }
 
@@ -1466,6 +1533,7 @@ setInterval(function(){
 studyStart();
 stat('launch'); save();
 markOpen();
+checkAchievements();
 
 /* ---------- 照片拆包：先渲染界面，照片后到再补渲染一次 ---------- */
 (function(){
