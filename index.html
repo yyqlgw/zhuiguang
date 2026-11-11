@@ -203,6 +203,18 @@ body.dark .barCol i.on{background:linear-gradient(180deg,#4265CC,#7FA0FF)}
 <div id="sheet" class="sheetWrap" onclick="if(event.target===this)closeSheet()"><div class="sheet" id="sheetBody"></div></div>
 <div id="rotate"><div>📱</div><div>请竖屏使用</div></div>
 
+<script type="application/json" id="achMeta">{"achievements":[
+{"id":"first_checkin","name":"初识追光","icon":"✧","desc":"完成第一次打卡","target":1},
+{"id":"week_streak","name":"七日之约","icon":"☀","desc":"连续打卡 7 天","target":7},
+{"id":"month_checkin","name":"月度守望","icon":"☾","desc":"累计打卡 30 天","target":30},
+{"id":"all_people","name":"十二星辰","icon":"✦","desc":"读完全部 12 位人物","target":12},
+{"id":"quiz_150","name":"百题斩","icon":"⚔","desc":"累计答题 150 道","target":150},
+{"id":"daily_full","name":"满分时刻","icon":"❖","desc":"每日一测拿到 3/3","target":3},
+{"id":"wrong_clear","name":"错题克星","icon":"✎","desc":"错题重练一局 3 题全对","target":3},
+{"id":"challenge_ace","name":"挑战达人","icon":"⚡","desc":"限时挑战单局 10 分以上","target":10},
+{"id":"notes_5","name":"笔耕不辍","icon":"✉","desc":"写下 5 条打卡心得","target":5},
+{"id":"study_5h","name":"专注时光","icon":"♫","desc":"累计学习满 5 小时","target":18000}
+]}</script>
 <script>
 const DATA = {"people":[{"name":"黄芊芊","field":"芯片","brief":"北京大学研究员，深耕超低功耗微纳电子器件基础研究及产业转化，2023 年获第十八届中国青年女科学家奖。","detail":"黄芊芊长期从事后摩尔时代超低功耗微纳电子器件研究，提出多种新型器件与电路结构，并与国内产业界合作推进成果转化。她 17 岁考入北京大学，28 岁被聘为博士生导师，是国内自主培养的芯片领域青年领军人才。","points":["17 岁考入北京大学","28 岁成为博士生导师","2010 年起在王阳元、黄如院士指导下从事超低功耗器件研究"],"source":"北京大学新闻网《黄芊芊：芯片突围者》；北大集成电路学院新闻"},{"name":"徐颖","field":"北斗导航","brief":"中国科学院研究员，2006 年起参与北斗二号系统研究，长期从事北斗增强与终端技术研究。","detail":"徐颖 2006 年在导师带领下开始参与北斗二号卫星系统研究，博士毕业后进入中国科学院工作，2015 年成为当时中科院最年轻的博士生导师之一。她主要从事北斗增强与终端技术研究，同时长期投身科普，被网友称为“北斗女神”，但她更希望大家关注北斗系统本身。","points":["2006 年开始参与北斗二号研究","2015 年成为中科院最年轻的博导之一","长期从事北斗增强与终端技术研究"],"source":"中国科学报《徐颖：可否不叫我“北斗女神”？》；人民网报道"},{"name":"桂海潮","field":"航天","brief":"北京航空航天大学教授，中国空间站首位载荷专家，任务期间完成 68 项空间科学实验。","detail":"桂海潮是北京航空航天大学教授，作为中国空间站首位载荷专家执行载人飞行任务。任务期间他与乘组密切配合，完成 68 项空间科学实验，涵盖微重力流体物理、材料制备、生命科学等关键领域。返回教学科研一线后，他带领团队研究在轨服务、空间碎片监测与清除中的空间感知、运动规划和精细操控等关键技术。","points":["中国空间站首位载荷专家","任务期间完成 68 项空间科学实验","返回后研究在轨服务与空间碎片清除"],"source":"人民日报《走近“最美科技工作者”》"},{"name":"赵洋","field":"深海装备","brief":"“奋斗者”号全海深载人潜水器副总设计师，2020 年下潜至 10909 米马里亚纳海沟。","detail":"赵洋任中国科学院沈阳自动化研究所正高级工程师、“奋斗者”号全海深载人潜水器副总设计师。针对深渊极端环境下大惯量载体的航行控制难题，他带领团队突破多项关键技术，完成“奋斗者”号控制系统的自主研制。2020 年 11 月，他搭乘“奋斗者”号下潜至 10909 米马里亚纳海沟。","points":["“奋斗者”号副总设计师","主持控制系统自主研制","2020 年下潜至 10909 米"],"source":"人民日报《走近“最美科技工作者”》"},{"name":"金海族","field":"新能源电池","brief":"宁德时代航空和机器人电池技术中心部长，研制高比能锂离子电池并推动电芯 AI 智能设计。","detail":"金海族带领团队研制出高比能锂离子电池，能量密度达到国际先进水平，填补国内空白。2021 年她启动电芯 AI 智能设计系统研发，推动研发模式从“经验驱动”转向“数据与 AI 驱动”。","points":["研制高比能锂离子电池","2021 年启动电芯 AI 智能设计系统","推动研发从经验驱动转向数据驱动"],"source":"人民日报《走近“最美科技工作者”》"},{"name":"陈蕾","field":"医学","brief":"四川大学华西医院主任医师，创建全球首个女性癫痫诊疗本体库。","detail":"育龄期女性癫痫患者的不孕率、孕期死亡率、后代畸胎率都显著高于普通女性。四川大学华西医院主任医师陈蕾带领团队创建全球首个女性癫痫诊疗本体库，突破癫痫预警关键技术，构建全生命周期管理体系，大幅降低患者不孕率与畸胎率。","points":["全球首个女性癫痫诊疗本体库","突破癫痫预警关键技术","构建全生命周期管理体系"],"source":"人民日报《走近“最美科技工作者”》"},{"name":"于宗仁","field":"文物保护","brief":"敦煌研究院保护研究所所长，用原位无损分析技术为千年壁画“体检”。","detail":"于宗仁长期坚守石窟文物保护一线，提出“看得清、摸得透、管得住”的科研目标，推动文物保护从经验判断转向科学决策、从事后抢救转向提前预防。","points":["坚守敦煌石窟保护一线","提出“看得清、摸得透、管得住”","构建壁画健康评价与多维检测体系"],"source":"人民日报《走近“最美科技工作者”》"},{"name":"黄桂云","field":"植物保护","brief":"长江生物多样性研究中心副主任，30 多年守护三峡珍稀植物，牵头保护濒危特有植物 2130 余种。","detail":"黄桂云在三峡濒危珍稀植物保护一线工作了 30 多年，牵头保护濒危特有植物 2130 余种，繁育苗木 32 万余株，建成国内最大濒危珍稀特有资源性种质资源库。","points":["保护濒危特有植物 2130 余种","繁育苗木 32 万余株","建成国内最大濒危植物种质资源库"],"source":"人民日报《走近“最美科技工作者”》"},{"name":"孔海南","field":"生态治理","brief":"上海交通大学讲席教授，把“实验室”搬到洱海田间地头，10 多年每年驻守洱海超 200 天。","detail":"“科学研究必须立足于最真实的一线数据。”上海交通大学讲席教授孔海南为了科学推进洱海治理，把“实验室”搬到了田间地头，带领团队完成 3 万次采样、16 万次水质分析。","points":["把实验室搬到洱海田间地头","每年驻守洱海超过 200 天","完成 3 万次采样、16 万次水质分析"],"source":"人民日报《走近“最美科技工作者”》"},{"name":"苏权科","field":"桥梁工程","brief":"港珠澳大桥工程总工程师，构建“港珠澳模型”耐久性设计理论。","detail":"港珠澳大桥要求 120 年设计寿命，工程总工程师苏权科带领团队攻克海洋环境下桥岛隧工程长寿命建造关键技术，构建起基于可靠度的耐久性设计理论，被国际同行称为“港珠澳模型”。","points":["港珠澳大桥工程总工程师","构建“港珠澳模型”耐久性设计理论","推动大桥数字化、智能化运维"],"source":"人民日报《走近“最美科技工作者”》"},{"name":"徐洪杰","field":"核能与光源（前辈）","brief":"曾任中科院上海应用物理研究所所长，主持上海光源建设，后转向钍基熔盐堆研究。","detail":"徐洪杰曾任中国科学院上海应用物理研究所所长，担任过上海光源国家重大科学工程总经理、钍基熔盐堆核能系统先导专项负责人。上海光源建成开放后，他又转向核能领域的“无人区”——钍基熔盐堆。","points":["主持上海光源国家重大科学工程","转向钍基熔盐堆世界级难题","“实现国家需求就是科技工作者的天职”"],"source":"人民日报《走近“最美科技工作者”》"},{"name":"宋仁德","field":"畜牧科技","brief":"青海玉树州动物疫病预防控制中心主任，破解牦牛“三低”难题，被牧民称为“牦牛博士”。","detail":"宋仁德针对玉树牦牛“繁殖率低、出栏率低、牧民收益率低”的“三低”难题，研发推广牦牛“放牧+补饲”生态高效养殖技术，构建牦牛“三级繁育体系”。","points":["研发“放牧+补饲”生态高效养殖技术","构建牦牛三级繁育体系","参与选育“玉树牦牛”入选国家名录"],"source":"人民日报《走近“最美科技工作者”》"}],"quotes":[{"text":"实现国家需求就是科技工作者的天职。","author":"徐洪杰","note":"上海光源、钍基熔盐堆"},{"text":"科学家的使命，不仅是破解眼前的“卡脖子”难题，更要勇于构建支撑行业高质量发展的新范式。","author":"金海族","note":"宁德时代 · 航空电池"},{"text":"科学研究必须立足于最真实的一线数据。","author":"孔海南","note":"上海交大 · 洱海治理"},{"text":"港珠澳大桥是世界一流的物理大桥，未来，我们要将其建设成世界一流的数字化大桥。","author":"苏权科","note":"港珠澳大桥总工程师"},{"text":"我的事业在中国，我的成就在中国，我的归宿在中国。","author":"钱学森","note":"中国航天事业奠基人"},{"text":"振兴中华，乃我辈之责。","author":"黄大年","note":"地球物理学家 · 吉林大学"},{"text":"人就像一粒种子，要做一粒好种子。","author":"袁隆平","note":"杂交水稻之父"},{"text":"美丽的宇宙太空，以它的神秘和绚丽，召唤我们踏过平庸。","author":"南仁东","note":"FAST 工程首席科学家"},{"text":"我愿以身许国。","author":"王淦昌","note":"核物理学家 · 两弹一星元勋"},{"text":"聪明在于勤奋，天才在于积累。","author":"华罗庚","note":"数学家"},{"text":"真理，哪怕只见到一线，我们也不能让它的光辉变得暗淡。","author":"李四光","note":"地质学家"},{"text":"桥何名欤？曰奋斗。","author":"茅以升","note":"桥梁工程专家 · 钱塘江大桥"}],"knowledge":[{"title":"芯片制程","body":"7nm、5nm 指的是晶体管关键尺寸量级。数字越小，同样面积能塞下的晶体管越多，通常功耗更低、性能更好。"},{"title":"极紫外光刻","body":"先进制程用波长 13.5 nm 的极紫外光在晶圆上刻画电路，整套设备涉及光学、材料、精密运动等多个学科。"},{"title":"摩尔定律","body":"集成电路上可容纳的晶体管数目约每 18–24 个月翻一番，这是产业界长期遵循的经验规律，并非物理定律。"},{"title":"北斗三频","body":"北斗系统提供多频信号，多频组合可以更好地消除电离层误差，从而提高定位精度。"},{"title":"北斗短报文","body":"北斗具备短报文通信能力，在没有地面移动网络的区域也能发送简短消息，这是它区别于其他导航系统的特色之一。"},{"title":"中国天眼","body":"FAST 口径 500 米，是目前世界最大的单口径球面射电望远镜，主要观测脉冲星、中性氢等。"},{"title":"第一宇宙速度","body":"约 7.9 km/s，是航天器环绕地球运行所需的最小发射速度。"},{"title":"万米深潜","body":"马里亚纳海沟 10909 米处的水压约为 1100 个大气压，相当于每平方厘米承受约 1.1 吨的重量。"},{"title":"光电效应","body":"光照射金属表面使电子逸出。爱因斯坦用光量子假说解释了它，并因此获得诺贝尔物理学奖。"},{"title":"电池能量密度","body":"电池能量密度常用 Wh/kg 表示，数值越高，同样重量能储存的电能越多，这也是航空电池攻关的关键指标。"},{"title":"同步辐射光源","body":"电子在环形加速器中偏转时会发出高亮度辐射，可用于研究材料微观结构，上海光源即属此类装置。"},{"title":"空间微重力","body":"空间站上并非完全没有重力，而是处于持续自由落体状态，残余加速度很小，因此称为微重力环境。"},{"title":"半导体掺杂","body":"纯净硅的导电能力很弱，掺入微量杂质后导电性会大幅改变，形成 P 型或 N 型半导体，这是晶体管的基础。"},{"title":"纳米有多小","body":"1 纳米是十亿分之一米，大约相当于一根头发直径的几万分之一。芯片制程常用纳米作单位。"},{"title":"EDA 工具","body":"现代芯片动辄数十亿晶体管，设计必须依靠电子设计自动化（EDA）工具完成，它与光刻机同属产业链关键环节。"},{"title":"封装与测试","body":"芯片制造完成后还要经过封装和测试才能使用。封装起保护与电气连接作用，测试负责筛除不良品。"},{"title":"光刻胶","body":"光刻胶是光刻工序中的感光材料，曝光后发生化学变化，把掩膜上的电路图形固定到晶圆表面。"},{"title":"12 英寸晶圆","body":"目前主流晶圆直径为 300 毫米（约 12 英寸）。晶圆越大，一次能制作的芯片越多，单位成本越低。"},{"title":"5G 与毫米波","body":"5G 除使用中低频段，也可使用毫米波频段，带来更大带宽，但穿透与覆盖能力较弱，需要更密集的基站。"},{"title":"光纤通信","body":"光纤利用全反射把光信号约束在纤芯中传输，损耗低、带宽大，是现代通信骨干网的基础。"},{"title":"北斗全球开通","body":"2020 年 7 月 31 日，北斗三号全球卫星导航系统正式开通，服务范围覆盖全球。"},{"title":"四大导航系统","body":"全球四大卫星导航系统是中国的北斗、美国的 GPS、俄罗斯的 GLONASS 和欧盟的伽利略。"},{"title":"地球同步轨道","body":"同步轨道卫星运行周期约 24 小时，与地球自转同步，从地面看它几乎静止在天空某一位置。"},{"title":"北斗混合星座","body":"北斗采用地球静止轨道、倾斜地球同步轨道和中圆地球轨道卫星组成的混合星座，兼顾覆盖与精度。"},{"title":"第二宇宙速度","body":"约 11.2 km/s，是航天器脱离地球引力束缚所需的最小速度，也称逃逸速度。"},{"title":"第三宇宙速度","body":"约 16.7 km/s，是航天器脱离太阳引力飞出太阳系所需的最小速度。"},{"title":"火箭为什么能飞","body":"火箭向后高速喷出燃气，靠反作用力获得向前推力。真空中没有空气可“蹬”，但反作用力照样成立。"},{"title":"空间站高度","body":"中国空间站运行在约 400 公里的近地轨道，属于低地球轨道，绕地球一圈大约 90 分钟。"},{"title":"神舟与天舟","body":"神舟飞船负责航天员往返，天舟货运飞船负责运送物资与推进剂，两者分工不同。"},{"title":"玉兔与祝融","body":"我国的月球车名为“玉兔”，火星车名为“祝融”，分别执行月球与火星表面探测任务。"},{"title":"太空育种","body":"把种子送上太空，利用宇宙辐射与微重力诱发变异，返回地面后再筛选优良性状，这就是航天育种。"},{"title":"最深的海","body":"马里亚纳海沟最深处约 11000 米，是地球海洋的最深处，也是人类探索的最极端环境之一。"},{"title":"蛟龙号","body":"我国“蛟龙”号载人潜水器最大下潜深度约 7062 米，“奋斗者”号则把纪录推进到 10909 米。"},{"title":"深海热液","body":"深海热液喷口附近没有阳光，却有以化学能为基础的独特生态系统，为研究生命起源提供了线索。"},{"title":"钛合金球舱","body":"深海载人潜水器的载人球舱常用高强度钛合金制造，以在极高压环境下保证结构安全。"},{"title":"海水压力","body":"海水深度每增加约 10 米，压力大约增加 1 个大气压，这是估算深海压力的简便方法。"},{"title":"锂电池负极","body":"锂离子电池负极常用石墨材料，充放电时锂离子在正负极之间来回嵌入与脱出，因此被称为“摇椅电池”。"},{"title":"磷酸铁锂","body":"磷酸铁锂正极材料热稳定性较好、循环寿命较长，常用于对安全性和寿命要求高的场景。"},{"title":"光伏发电","body":"太阳能电池利用光生伏特效应，把光能直接转换成电能，过程中没有燃烧、不产生废气。"},{"title":"氢能","body":"氢气燃烧的产物主要是水，被视为清洁能源载体，但制取、储存和运输仍是需要攻关的环节。"},{"title":"风力发电","body":"风力发电把风能转成机械能再转成电能，属于可再生能源，选址高度依赖风资源分布。"},{"title":"特高压输电","body":"特高压输电可以显著降低长距离线路损耗，适合把西部能源输送到东部负荷中心。"},{"title":"癫痫","body":"癫痫是慢性神经系统疾病，由大脑神经元异常同步放电引起，需要长期规范治疗与管理。"},{"title":"伦理审查","body":"涉及人的医学研究在开展前必须通过伦理委员会审查，保障受试者的知情同意与安全。"},{"title":"疫苗原理","body":"疫苗让免疫系统提前“认识”病原体，形成免疫记忆，真正感染时能更快更有效地应答。"},{"title":"壁画病害","body":"起甲、酥碱、空鼓是壁画常见病害。酥碱与盐分迁移有关，起甲则表现为颜料层翘起脱落。"},{"title":"预防性保护","body":"预防性保护强调监测并控制温湿度、光照和污染物，在病害发生前干预，而不是等损坏后再修复。"},{"title":"无损检测","body":"X 射线、红外热像、激光拉曼等技术可以在不接触或微损的情况下分析文物材质与内部结构。"},{"title":"水体富营养化","body":"氮磷等营养物质过量进入水体，会导致藻类暴发、溶解氧下降，进而破坏水生态，这就是富营养化。"},{"title":"就地与迁地保护","body":"就地保护是在原生环境建立保护区，迁地保护是把物种移到植物园、种质库异地保存，两者常配合使用。"},{"title":"两弹一星","body":"“两弹一星”指原子弹、氢弹和人造地球卫星。1999 年，国家授予 23 位科技专家“两弹一星”功勋奖章，表彰他们在极为艰苦的条件下突破关键技术的贡献。"}],"quiz":[{"q":"黄芊芊主要从事哪个领域的研究？","options":["超低功耗微纳电子器件","卫星导航","深海装备"],"answer":0,"explain":"她深耕后摩尔时代超低功耗微纳电子器件研究，2023 年获中国青年女科学家奖。"},{"q":"黄芊芊获得的是第几届中国青年女科学家奖？","options":["第十六届","第十七届","第十八届"],"answer":2,"explain":"2023 年她获得第十八届中国青年女科学家奖。"},{"q":"黄芊芊多少岁被聘为北京大学博士生导师？","options":["24 岁","28 岁","32 岁"],"answer":1,"explain":"她 17 岁考入北大，28 岁被聘为博士生导师。"},{"q":"徐颖主要参与的卫星导航系统是？","options":["GPS","伽利略","北斗"],"answer":2,"explain":"她 2006 年起参与北斗二号系统研究，长期从事北斗增强与终端技术研究。"},{"q":"网友给徐颖起的称号是？","options":["北斗女神","航天女神","深海女神"],"answer":0,"explain":"因科普风格，她被网友称为“北斗女神”，但她更希望大家关注北斗系统本身。"},{"q":"徐颖 2015 年成为当时中科院最年轻的什么？","options":["院士","博士生导师之一","所长"],"answer":1,"explain":"2015 年她成为当时中科院最年轻的博士生导师之一。"},{"q":"桂海潮在中国空间站担任什么角色？","options":["指令长","首位载荷专家","飞行工程师"],"answer":1,"explain":"他是中国空间站首位载荷专家。"},{"q":"桂海潮任务期间完成了多少项空间科学实验？","options":["28 项","48 项","68 项"],"answer":2,"explain":"任务期间完成 68 项空间科学实验，涵盖微重力流体物理、材料制备、生命科学等。"},{"q":"赵洋是哪台潜水器的副总设计师？","options":["蛟龙号","奋斗者号","深海勇士号"],"answer":1,"explain":"他是“奋斗者”号全海深载人潜水器副总设计师。"},{"q":"“奋斗者”号 2020 年下潜的最深纪录是多少米？","options":["7062 米","9090 米","10909 米"],"answer":2,"explain":"2020 年 11 月，“奋斗者”号下潜至 10909 米马里亚纳海沟。"},{"q":"赵洋负责攻关的是潜水器的哪一部分？","options":["推进器","控制系统","照明系统"],"answer":1,"explain":"他带领团队完成“奋斗者”号控制系统的自主研制。"},{"q":"金海族所在的企业是？","options":["宁德时代","比亚迪","中创新航"],"answer":0,"explain":"她是宁德时代航空和机器人电池技术中心部长。"},{"q":"金海族 2021 年启动研发的系统是？","options":["电芯 AI 智能设计系统","换电网络","氢燃料电池"],"answer":0,"explain":"她推动研发模式从“经验驱动”转向“数据与 AI 驱动”。"},{"q":"陈蕾所在的医院是？","options":["协和医院","华西医院","瑞金医院"],"answer":1,"explain":"她是四川大学华西医院主任医师。"},{"q":"陈蕾团队创建的本体库针对哪类患者？","options":["女性癫痫患者","糖尿病患者","肿瘤患者"],"answer":0,"explain":"团队创建了全球首个女性癫痫诊疗本体库。"},{"q":"于宗仁所在的机构是？","options":["故宫博物院","敦煌研究院","国家博物馆"],"answer":1,"explain":"他是敦煌研究院保护研究所所长。"},{"q":"于宗仁提出的文物保护“三可”目标是？","options":["看得清、摸得透、管得住","看得远、守得稳、传得开","修得旧、保得久、展得广"],"answer":0,"explain":"他提出“看得清、摸得透、管得住”的科研目标。"},{"q":"黄桂云主要保护的是哪一类资源？","options":["珍稀植物","古建筑","野生动物"],"answer":0,"explain":"她 30 多年守护三峡珍稀植物，牵头保护濒危特有植物 2130 余种。"},{"q":"孔海南长期驻守治理的湖泊是？","options":["太湖","洱海","洞庭湖"],"answer":1,"explain":"他每年驻守洱海超过 200 天，完成 3 万次采样、16 万次水质分析。"},{"q":"苏权科担任的职务是？","options":["港珠澳大桥工程总工程师","杭州湾大桥设计师","青藏铁路总指挥"],"answer":0,"explain":"他是港珠澳大桥工程总工程师。"},{"q":"苏权科团队提出的耐久性设计理论被国际同行称为？","options":["港珠澳模型","中国模型","跨海模型"],"answer":0,"explain":"基于可靠度的耐久性设计理论被国际同行称为“港珠澳模型”。"},{"q":"徐洪杰主持的国家重大科学工程是？","options":["上海光源","中国天眼","北斗系统"],"answer":0,"explain":"他曾任上海光源国家重大科学工程总经理。"},{"q":"徐洪杰后期转向的核能方向是？","options":["钍基熔盐堆","压水堆","快中子堆"],"answer":0,"explain":"上海光源建成后，他转向核能领域的“无人区”——钍基熔盐堆。"},{"q":"宋仁德被牧民亲切地称为？","options":["牦牛博士","草原医生","高原牧人"],"answer":0,"explain":"他长期研究玉树牦牛，被牧民称为“牦牛博士”。"},{"q":"宋仁德破解的牦牛“三低”难题不包括哪一项？","options":["繁殖率低","出栏率低","含肉率低"],"answer":2,"explain":"“三低”指繁殖率低、出栏率低、牧民收益率低。"},{"q":"芯片制程中 7nm、5nm 指的是什么？","options":["晶体管关键尺寸量级","芯片面积","工作电压"],"answer":0,"explain":"它指的是晶体管关键尺寸量级，数字越小，同样面积能塞下的晶体管越多。"},{"q":"制程数字越小，通常意味着什么？","options":["功耗更低、性能更好","芯片更便宜","发热更大"],"answer":0,"explain":"同样的面积能容纳更多晶体管，通常功耗更低、性能更好。"},{"q":"极紫外光刻（EUV）使用的光波长约为？","options":["13.5 nm","193 nm","365 nm"],"answer":0,"explain":"先进制程使用 13.5 nm 的极紫外光在晶圆上刻画电路。"},{"q":"光刻在芯片制造中的作用是？","options":["把电路图形转移到晶圆上","给芯片散热","检测芯片良率"],"answer":0,"explain":"光刻是用光把掩膜上的电路图形转印到晶圆表面的关键工序。"},{"q":"摩尔定律描述的是什么现象？","options":["芯片价格每两年翻倍","晶体管数目约每 18–24 个月翻一番","电池容量每年翻倍"],"answer":1,"explain":"这是产业界长期遵循的经验规律。"},{"q":"摩尔定律的性质是？","options":["物理定律","经验规律","国际标准"],"answer":1,"explain":"它是产业界的经验规律，并非物理定律。"},{"q":"北斗系统提供多频信号的主要好处是？","options":["消除电离层误差，提高定位精度","增加卫星数量","延长电池寿命"],"answer":0,"explain":"多频组合可以更好地消除电离层误差，从而提高定位精度。"},{"q":"北斗系统区别于其他导航系统的特色能力是？","options":["短报文通信","卫星电视","气象预报"],"answer":0,"explain":"没有地面移动网络时也能发送简短消息。"},{"q":"FAST 中国天眼的口径是多少？","options":["300 米","500 米","1000 米"],"answer":1,"explain":"FAST 口径 500 米，是目前世界最大的单口径球面射电望远镜。"},{"q":"FAST 主要观测的对象不包括？","options":["脉冲星","中性氢","系外行星大气成分"],"answer":2,"explain":"FAST 主要观测脉冲星、中性氢等。"},{"q":"第一宇宙速度约为？","options":["3.0 km/s","7.9 km/s","11.2 km/s"],"answer":1,"explain":"约 7.9 km/s，是航天器环绕地球运行所需的最小发射速度。"},{"q":"万米深潜时，10909 米处的水压约为？","options":["110 个大气压","500 个大气压","1100 个大气压"],"answer":2,"explain":"相当于每平方厘米承受约 1.1 吨的重量。"},{"q":"海水深度每增加 10 米，压力大约增加多少？","options":["1 个大气压","10 个大气压","100 个大气压"],"answer":0,"explain":"约每 10 米增加 1 个大气压，这是估算深海压力的常用方法。"},{"q":"光电效应指的是？","options":["光照使金属表面逸出电子","光照使电阻增大","光照使导体发热"],"answer":0,"explain":"爱因斯坦用光量子假说解释了光电效应。"},{"q":"爱因斯坦因哪项工作获得诺贝尔物理学奖？","options":["相对论","光电效应","量子纠缠"],"answer":1,"explain":"他因光电效应的研究获得 1921 年诺贝尔物理学奖。"},{"q":"电池能量密度常用的单位是？","options":["Wh/kg","V/A","mAh/mm"],"answer":0,"explain":"能量密度常用 Wh/kg 表示。"},{"q":"能量密度越高的电池意味着？","options":["同样重量能储存更多电能","充电更慢","寿命更短"],"answer":0,"explain":"数值越高，同样重量能储存的电能越多。"},{"q":"同步辐射光源最常用于？","options":["研究材料微观结构","发电","通信"],"answer":0,"explain":"电子偏转时发出的高亮度辐射，可用于研究材料微观结构。"},{"q":"上海光源属于哪类装置？","options":["同步辐射光源","射电望远镜","核聚变装置"],"answer":0,"explain":"上海光源是我国重要的同步辐射光源装置。"},{"q":"空间站上出现微重力的原因是？","options":["处于持续自由落体状态","空间站离地球很远","空间站内没有空气"],"answer":0,"explain":"空间站并非完全没有重力，而是持续自由落体，残余加速度很小。"},{"q":"微重力环境意味着？","options":["重力完全为零","重力影响极小","重力方向反转"],"answer":1,"explain":"微重力是残余加速度很小的状态，并非重力完全为零。"},{"q":"中国空间站的名称是？","options":["天宫","天和","神舟"],"answer":0,"explain":"中国空间站名为“天宫”，核心舱名为“天和”，载人飞船为“神舟”。"},{"q":"我国的月球车名称是？","options":["玉兔","祝融","火星车"],"answer":0,"explain":"月球车叫“玉兔”，火星车叫“祝融”。"},{"q":"我国的火星车名称是？","options":["玉兔","祝融","天问"],"answer":1,"explain":"“天问”是火星探测任务，“祝融”是火星车名称。"},{"q":"第二宇宙速度约为？","options":["7.9 km/s","11.2 km/s","16.7 km/s"],"answer":1,"explain":"约 11.2 km/s，是脱离地球引力所需的最小速度。"},{"q":"火箭升空主要利用了？","options":["反作用力","浮力","离心力"],"answer":0,"explain":"火箭向后喷出高速气体，靠反作用力获得向前推力。"},{"q":"下列哪一项不属于全球四大卫星导航系统？","options":["北斗","GPS","星链"],"answer":2,"explain":"四大系统是北斗、GPS、GLONASS 和伽利略。"},{"q":"北斗三号全球卫星导航系统正式开通的年份是？","options":["2018 年","2020 年","2022 年"],"answer":1,"explain":"2020 年 7 月 31 日，北斗三号全球系统正式开通。"},{"q":"卫星导航定位的基本原理是？","options":["测量到多颗卫星的距离并交会定位","测量地磁场变化","拍摄星空比对"],"answer":0,"explain":"通过接收多颗卫星信号测距，再由距离交会解算出位置。"},{"q":"制造芯片最基本的半导体材料是？","options":["硅","铜","铁"],"answer":0,"explain":"硅是目前集成电路最主要的半导体材料。"},{"q":"晶体管在电路中的基本作用是？","options":["开关与放大","储能","发光"],"answer":0,"explain":"晶体管可以像开关一样控制电流，也能放大信号。"},{"q":"晶圆通常是什么材料制成的薄片？","options":["硅","铜","石英"],"answer":0,"explain":"晶圆通常是高纯度单晶硅制成的薄片。"},{"q":"下列哪一项属于芯片产业链的环节？","options":["封装测试","矿石冶炼","卫星测控"],"answer":0,"explain":"芯片产业链一般包括设计、制造、封装测试。"},{"q":"我国被“卡脖子”最典型的芯片设备是？","options":["高端光刻机","封装机","测试仪"],"answer":0,"explain":"高端光刻机是芯片制造中被“卡脖子”的关键设备之一。"},{"q":"马里亚纳海沟位于哪个大洋？","options":["太平洋","大西洋","印度洋"],"answer":0,"explain":"马里亚纳海沟位于西太平洋。"},{"q":"我国“蛟龙”号载人潜水器曾创造的最大下潜深度约为？","options":["3759 米","7062 米","10909 米"],"answer":1,"explain":"“蛟龙”号最大下潜深度约 7062 米，10909 米是“奋斗者”号的纪录。"},{"q":"深海载人潜水器的球壳需要具备什么性能？","options":["承受极高水压","反射阳光","发射卫星信号"],"answer":0,"explain":"深海环境压力极高，载人球壳必须能承受巨大水压。"},{"q":"深海环境的主要挑战不包括？","options":["高压","低温","强光照"],"answer":2,"explain":"深海高压、低温、几乎无光，强光照并不存在。"},{"q":"锂离子电池的正极材料常见的是？","options":["磷酸铁锂","石墨","铜箔"],"answer":0,"explain":"石墨多用于负极，磷酸铁锂是常见正极材料之一。"},{"q":"目前新能源汽车动力电池的主流类型是？","options":["锂离子电池","铅酸电池","镍镉电池"],"answer":0,"explain":"锂离子电池因能量密度较高，是主流动力电池。"},{"q":"光伏发电利用的是？","options":["光生伏特效应","光电效应逸出电子","热膨胀"],"answer":0,"explain":"太阳能电池靠光生伏特效应把光能转成电能。"},{"q":"风力发电的能量转换过程是？","options":["风能→机械能→电能","风能→化学能→电能","风能→热能→电能"],"answer":0,"explain":"风推动叶片转动带动发电机，最终转成电能。"},{"q":"癫痫属于哪一类疾病？","options":["神经系统疾病","传染病","骨科疾病"],"answer":0,"explain":"癫痫是慢性神经系统疾病。"},{"q":"四川大学华西医院位于哪座城市？","options":["成都","重庆","西安"],"answer":0,"explain":"华西医院位于四川成都。"},{"q":"开展临床试验前必须经过什么程序？","options":["伦理审查","媒体公示","商业投标"],"answer":0,"explain":"涉及人体的医学研究必须经过伦理委员会审查。"},{"q":"莫高窟位于哪个省份？","options":["甘肃","陕西","新疆"],"answer":0,"explain":"莫高窟位于甘肃省敦煌市。"},{"q":"壁画常见的病害不包括？","options":["起甲","酥碱","生锈"],"answer":2,"explain":"起甲、酥碱、空鼓是壁画常见病害，生锈一般指金属器物。"},{"q":"文物保护中的“预防性保护”强调？","options":["控制环境、提前干预","坏了再修","尽量多开放"],"answer":0,"explain":"预防性保护通过环境监测与控制减少病害发生。"},{"q":"洱海位于哪个省份？","options":["云南","贵州","四川"],"answer":0,"explain":"洱海位于云南省大理白族自治州。"},{"q":"水体富营养化最主要的成因通常是？","options":["氮磷等营养物质过多","水温过低","盐度升高"],"answer":0,"explain":"氮磷过多会导致藻类大量繁殖，形成富营养化。"},{"q":"植物多样性保护常用的两种方式是？","options":["就地保护与迁地保护","焚烧与填埋","引进与淘汰"],"answer":0,"explain":"就地保护保留原生环境，迁地保护则在异地保存。"},{"q":"三峡工程位于哪条江上？","options":["长江","黄河","珠江"],"answer":0,"explain":"三峡工程位于长江干流。"},{"q":"港珠澳大桥连接的是？","options":["香港、珠海、澳门","深圳、珠海、澳门","香港、深圳、珠海"],"answer":0,"explain":"港珠澳大桥连接香港、珠海和澳门三地。"},{"q":"港珠澳大桥的设计使用寿命要求是？","options":["50 年","80 年","120 年"],"answer":2,"explain":"设计要求 120 年，团队由此构建了“港珠澳模型”耐久性理论。"},{"q":"跨海大桥常用的桥型是？","options":["斜拉桥、悬索桥","石拱桥","浮桥"],"answer":0,"explain":"大跨度跨海桥梁多采用斜拉桥或悬索桥形式。"},{"q":"海底沉管隧道的主要用途是？","options":["供车辆跨越海域通行","输送石油","养殖鱼类"],"answer":0,"explain":"沉管隧道是把预制管节沉放到海床基槽中形成的海底通道。"},{"q":"目前商业核电站利用的是？","options":["核裂变","核聚变","放射性衰变"],"answer":0,"explain":"核电站通过重核裂变释放能量来发电。"},{"q":"核聚变与核裂变的主要区别是？","options":["聚变是轻核结合，裂变是重核分裂","聚变不释放能量","裂变只发生在太阳上"],"answer":0,"explain":"聚变由轻核结合成较重的核，裂变则由重核分裂成较轻的核。"},{"q":"钍基熔盐堆属于哪一代核能系统？","options":["第二代","第三代","第四代"],"answer":2,"explain":"钍基熔盐堆被列入第四代先进核能系统之列。"},{"q":"被称为“杂交水稻之父”的科学家是？","options":["袁隆平","钱学森","李四光"],"answer":0,"explain":"袁隆平院士被誉为“杂交水稻之父”。"},{"q":"牦牛主要分布在哪个地区？","options":["青藏高原","东北平原","东南沿海"],"answer":0,"explain":"牦牛是青藏高原地区重要的家畜。"},{"q":"动物疫病防控的核心措施不包括？","options":["免疫接种","监测预警","随意调运牲畜"],"answer":2,"explain":"免疫、监测、隔离是核心措施，随意调运反而会加大传播风险。"},{"q":"全国科技工作者日是哪一天？","options":["5 月 30 日","6 月 1 日","9 月 10 日"],"answer":0,"explain":"自 2017 年起，每年 5 月 30 日为全国科技工作者日。"},{"q":"“两弹一星”中的“两弹”通常指？","options":["原子弹和氢弹","导弹和卫星","原子弹和人造卫星"],"answer":0,"explain":"“两弹”指原子弹、氢弹，“一星”指人造地球卫星。"},{"q":"下列哪一项不属于科学家精神的内容？","options":["爱国","创新","逐利"],"answer":2,"explain":"科学家精神包括爱国、创新、求实、奉献、协同、育人。"},{"q":"“最美科技工作者”由哪两个单位发布先进事迹？","options":["中央宣传部、中国科协","教育部、科技部","共青团中央、全国学联"],"answer":0,"explain":"中央宣传部、中国科协向全社会发布“最美科技工作者”先进事迹。"},{"q":"中国青年女科学家奖的共同举办单位包括？","options":["全国妇联、中国科协等","国家统计局","世界卫生组织"],"answer":0,"explain":"该奖由全国妇联、中国科协等共同举办。"},{"q":"“把论文写在祖国的大地上”强调？","options":["科研要服务国家与人民","论文只在国内发表","不要国际合作"],"answer":0,"explain":"它强调科学研究要面向实际需求、服务国家和人民。"},{"q":"实现高水平科技自立自强，关键词是？","options":["自主创新","全面引进","模仿跟随"],"answer":0,"explain":"科技自立自强强调提升自主创新能力。"},{"q":"真空中的光速约为？","options":["3×10⁸ m/s","3×10⁶ m/s","3×10⁵ m/s"],"answer":0,"explain":"真空光速约 3×10⁸ 米每秒。"},{"q":"地球同步轨道卫星的运行周期约为？","options":["24 小时","12 小时","30 天"],"answer":0,"explain":"同步轨道卫星周期约 24 小时，与地球自转同步。"},{"q":"卫星导航信号属于哪种类型的波？","options":["无线电波","声波","机械波"],"answer":0,"explain":"卫星导航使用无线电波传信号，属于电磁波。"},{"q":"芯片制造车间的洁净度要求？","options":["极高，需控制微尘到极低水平","无所谓","只需要保持干燥"],"answer":0,"explain":"微尘会直接毁掉纳米级电路，因此需要极高洁净度。"},{"q":"我国科技创新强调的“四个面向”不包括？","options":["面向世界科技前沿","面向经济主战场","面向国际排名"],"answer":2,"explain":"“四个面向”指面向世界科技前沿、经济主战场、国家重大需求、人民生命健康。"},{"q":"航天员往返空间站主要依靠哪种载人飞船？","options":["神舟","天舟","嫦娥"],"answer":0,"explain":"神舟飞船负责载人往返，天舟是货运飞船，嫦娥是探月工程。"},{"q":"黄芊芊多少岁考入北京大学？","options":["15 岁","17 岁","21 岁"],"answer":1,"explain":"她 17 岁考入北京大学，28 岁被聘为博士生导师。"},{"q":"桂海潮在空间站完成的实验涵盖下列哪个领域？","options":["微重力流体物理","海底热液","桥梁耐久性"],"answer":0,"explain":"68 项实验涵盖微重力流体物理、材料制备、生命科学等关键领域。"},{"q":"赵洋所在的科研单位是？","options":["中国科学院沈阳自动化研究所","敦煌研究院","北京航空航天大学"],"answer":0,"explain":"他是中国科学院沈阳自动化研究所正高级工程师。"},{"q":"金海族团队研制的高比能锂离子电池填补了什么？","options":["国内空白","国际空白","行业标准空白"],"answer":0,"explain":"能量密度达到国际先进水平，填补国内空白。"},{"q":"陈蕾指出的育龄期女性癫痫患者风险，不包括下列哪一项？","options":["不孕率更高","孕期死亡率更高","后代畸胎率更低"],"answer":2,"explain":"不孕率、孕期死亡率、后代畸胎率都显著高于普通女性。"},{"q":"黄桂云团队繁育的苗木约有多少株？","options":["3 万余株","32 万余株","320 万余株"],"answer":1,"explain":"她牵头保护濒危特有植物 2130 余种，繁育苗木 32 万余株。"},{"q":"孔海南团队为洱海治理完成了多少次采样？","options":["3 千次","3 万次","30 万次"],"answer":1,"explain":"团队完成 3 万次采样、16 万次水质分析。"},{"q":"宋仁德研发推广的牦牛养殖技术模式是？","options":["放牧+补饲","圈养+精料","纯放牧"],"answer":0,"explain":"他推广“放牧+补饲”生态高效养殖技术，并构建三级繁育体系。"},{"q":"科学家精神包括六个方面，下列哪一项不在其中？","options":["爱国、创新","求实、奉献","竞争、逐利"],"answer":2,"explain":"科学家精神包括爱国、创新、求实、奉献、协同、育人。"},{"q":"科学家精神中的“协同”强调什么？","options":["团结协作、联合攻关","各自独立完成","严格保密不外传"],"answer":0,"explain":"“协同”要求科技工作者团结协作、集智攻关。"},{"q":"“两弹一星”元勋共有多少位？","options":["12 位","23 位","45 位"],"answer":1,"explain":"1999 年国家授予 23 位科技专家“两弹一星”功勋奖章。"},{"q":"“两弹一星”精神的内容不包括下列哪一项？","options":["自力更生、艰苦奋斗","大力协同、勇于登攀","追求名利、各自为战"],"answer":2,"explain":"“两弹一星”精神是热爱祖国、无私奉献，自力更生、艰苦奋斗，大力协同、勇于登攀。"},{"q":"“两弹一星”元勋邓稼先被誉为？","options":["两弹元勋","杂交水稻之父","北斗女神"],"answer":0,"explain":"邓稼先隐姓埋名数十年，被誉为“两弹元勋”。"},{"q":"我国科技创新“四个面向”中的第一项是？","options":["面向世界科技前沿","面向经济主战场","面向国家重大需求"],"answer":0,"explain":"“四个面向”指面向世界科技前沿、经济主战场、国家重大需求、人民生命健康。"},{"q":"实现高水平科技自立自强，核心是提升什么能力？","options":["自主创新","技术引进","规模扩张"],"answer":0,"explain":"科技自立自强强调把关键核心技术掌握在自己手中，提升自主创新能力。"},{"q":"“把论文写在祖国的大地上”体现了怎样的科研导向？","options":["科研要面向实际需求","论文只在国内发表","不需要国际合作"],"answer":0,"explain":"这句话强调科学研究要扎根中国大地、服务国家和人民。"},{"q":"下列哪位科学家放弃国外优厚待遇、冲破阻挠毅然回国？","options":["钱学森","达尔文","爱迪生"],"answer":0,"explain":"钱学森回国投身国防科技事业，是爱国科学家的典范。"},{"q":"全国科技工作者日是从哪一年开始设立的？","options":["2017 年","2010 年","2020 年"],"answer":0,"explain":"自 2017 年起，每年 5 月 30 日为全国科技工作者日。"},{"q":"中国青年女科学家奖面向的群体是？","options":["青年女科学家","在校小学生","企业管理者"],"answer":0,"explain":"该奖由全国妇联、中国科协等共同举办，面向青年女科学家。"},{"q":"科学家精神中的“育人”强调什么？","options":["培养青年科技人才","多出论文数量","争取更多经费"],"answer":0,"explain":"“育人”要求甘为人梯、奖掖后学，培养青年科技人才。"},{"q":"实现科技自立自强，亟需突破的“卡脖子”问题主要指？","options":["关键核心技术受制于人","基础研究经费不足","科研人员数量太少"],"answer":0,"explain":"“卡脖子”指关键核心技术受制于人，需要集中力量攻关。"},{"q":"“两弹一星”精神中的“大力协同”体现了什么？","options":["全国一盘棋、协作攻关","单打独斗","重复建设"],"answer":0,"explain":"“两弹一星”工程依靠全国大协作完成，体现了社会主义制度优势。"},{"q":"科学家精神中的“求实”要求科技工作者？","options":["尊重事实、严谨治学","夸大成果","回避质疑"],"answer":0,"explain":"“求实”要求坚持实事求是、追求真理、严谨治学。"},{"q":"芯片制造完成后，还要经过哪两个环节才能使用？","options":["封装与测试","冶炼与铸造","印刷与喷涂"],"answer":0,"explain":"封装起保护与电气连接作用，测试负责筛除不良品。"},{"q":"光刻胶在光刻工序中的作用是？","options":["感光材料，把掩膜图形固定到晶圆","给晶圆降温","检测电路通断"],"answer":0,"explain":"光刻胶曝光后发生化学变化，把掩膜上的电路图形固定到晶圆表面。"},{"q":"目前主流晶圆的直径是多少？","options":["100 毫米","200 毫米","300 毫米"],"answer":2,"explain":"主流晶圆直径为 300 毫米，约 12 英寸。"},{"q":"晶圆尺寸越大，带来的好处是？","options":["一次制作的芯片更多、单位成本更低","良率一定更高","可以不用光刻"],"answer":0,"explain":"晶圆越大，一次能制作的芯片越多，单位成本越低。"},{"q":"判断：现代芯片的复杂设计可以完全不依赖软件工具完成。","options":["正确","错误"],"answer":1,"explain":"数十亿晶体管的设计必须依靠电子设计自动化（EDA）工具完成。"},{"q":"1 纳米等于多少米？","options":["十亿分之一米","百万分之一米","万分之一米"],"answer":0,"explain":"1 纳米是十亿分之一米，约为一根头发直径的几万分之一。"},{"q":"5G 使用毫米波频段的特点是？","options":["带宽更大但覆盖能力较弱","带宽更小但覆盖更广","与中低频段完全相同"],"answer":0,"explain":"毫米波带来更大带宽，但穿透与覆盖能力较弱，需要更密集的基站。"},{"q":"判断：光纤依靠全反射把光信号约束在纤芯中传输。","options":["正确","错误"],"answer":0,"explain":"光纤利用全反射约束光信号，损耗低、带宽大。"},{"q":"北斗系统采用的混合星座由哪几类轨道卫星组成？","options":["地球静止轨道、倾斜地球同步轨道、中圆地球轨道","低轨、高轨两类","仅地球静止轨道"],"answer":0,"explain":"混合星座兼顾覆盖与精度。"},{"q":"第三宇宙速度约为多少？","options":["7.9 km/s","11.2 km/s","16.7 km/s"],"answer":2,"explain":"约 16.7 km/s，是航天器脱离太阳引力飞出太阳系所需的最小速度。"},{"q":"中国空间站运行的轨道高度约为？","options":["100 公里","400 公里","36000 公里"],"answer":1,"explain":"中国空间站运行在约 400 公里的近地轨道。"},{"q":"空间站绕地球飞行一圈大约需要多久？","options":["约 90 分钟","约 24 小时","约 7 天"],"answer":0,"explain":"在约 400 公里高度绕地球一圈大约 90 分钟。"},{"q":"天舟飞船的主要任务是？","options":["运送物资与推进剂","载人往返","月球着陆"],"answer":0,"explain":"神舟负责航天员往返，天舟负责运送物资与推进剂。"},{"q":"太空育种主要利用太空中的什么因素诱发变异？","options":["宇宙辐射与微重力","高温高压","强磁场"],"answer":0,"explain":"种子返回地面后再筛选优良性状，这就是航天育种。"},{"q":"判断：深海热液喷口附近的生态系统主要依靠阳光维持。","options":["正确","错误"],"answer":1,"explain":"热液区没有阳光，那里的生态系统以化学能为基础。"},{"q":"深海载人潜水器的载人球舱常用什么材料制造？","options":["高强度钛合金","普通玻璃钢","铝合金"],"answer":0,"explain":"钛合金强度高，可在极高压环境下保证结构安全。"},{"q":"锂离子电池的负极常用什么材料？","options":["石墨","磷酸铁锂","铜箔"],"answer":0,"explain":"负极常用石墨，锂离子在正负极之间来回嵌入与脱出。"},{"q":"锂离子电池被称为“摇椅电池”是因为？","options":["锂离子在正负极之间来回嵌入脱出","外形像摇椅","需要摇晃充电"],"answer":0,"explain":"充放电时锂离子在两极间往返，形似摇椅。"},{"q":"判断：磷酸铁锂正极材料的热稳定性较好、循环寿命较长。","options":["正确","错误"],"answer":0,"explain":"正因如此，它常用于对安全性和寿命要求高的场景。"},{"q":"氢气被视为清洁能源载体，主要是因为燃烧产物是？","options":["水","二氧化碳","二氧化硫"],"answer":0,"explain":"氢气燃烧产物主要是水，但制取、储存和运输仍需攻关。"},{"q":"特高压输电的主要优势是？","options":["显著降低长距离线路损耗","设备更便宜","施工更简单"],"answer":0,"explain":"特高压适合把西部能源输送到东部负荷中心。"},{"q":"判断：疫苗可以直接杀死人体内已经存在的病原体。","options":["正确","错误"],"answer":1,"explain":"疫苗是让免疫系统提前“认识”病原体、形成免疫记忆，而不是直接杀菌。"},{"q":"壁画“酥碱”病害与什么因素关系最密切？","options":["盐分迁移","光照过强","昆虫啃食"],"answer":0,"explain":"酥碱与盐分迁移有关，起甲则表现为颜料层翘起脱落。"},{"q":"下列哪一项不属于文物无损检测常用技术？","options":["破坏性取样化验","X 射线","红外热像"],"answer":0,"explain":"无损检测可在不接触或微损的情况下分析材质与内部结构。"},{"q":"水体富营养化会带来什么后果？","options":["藻类暴发、溶解氧下降","水质变清","鱼类增多"],"answer":0,"explain":"氮磷过量导致藻类暴发，溶解氧下降，破坏水生态。"},{"q":"判断：迁地保护是指在原生环境建立自然保护区。","options":["正确","错误"],"answer":1,"explain":"在原生环境建保护区是就地保护；迁地保护是把物种移到植物园、种质库异地保存。"},{"q":"判断：摩尔定律是物理学定律，不是产业界的经验规律。","options":["正确","错误"],"answer":1,"explain":"摩尔定律是产业界长期遵循的经验规律，并非物理定律。"}]};
 let PHOTOS = {};
@@ -217,7 +229,8 @@ DATA.quiz.forEach(q=>{ q.cat = categoryOf(q.q); });
 const KEY='zhuiguang_web_v1';
 const BAK=KEY+'_bak';
 function blank(){ return {points:0,days:{},read:[],wrong:[],wrongMeta:{},fav:[],salt:0,
-  daily:{},cat:{},wrongrun:{},person:{},challenge:{},study:{},stats:{},remind:{on:0,min:1200},
+  daily:{},cat:{},wrongrun:{},person:{},challenge:{},challengePts:{},study:{},stats:{},remind:{on:0,min:1200},
+  cards:0,cardsMonth:'',
   ach:[],ui:{font:0,dark:0}}; }
 let S;
 let DEMO=null;                 // 演示模式的数据只放在内存里，不落盘
@@ -241,6 +254,76 @@ function markOpen(){
   S.meta.lastOpen=t;
   save();
 }
+/** 每月发 1 张免费补签卡，最多持有 2 张。 */
+function ensureMakeupCard(){
+  const ym=today().slice(0,7);
+  if(S.cardsMonth!==ym){ S.cardsMonth=ym; S.cards=Math.min(2,(S.cards||0)+1); save(); }
+}
+function makeupLabel(){
+  ensureMakeupCard();
+  return (S.cards||0)>0 ? ('补签打卡（免费卡 ×'+(S.cards||0)+'）') : '补签打卡（消耗 20 分 / 天）';
+}
+
+/* ---------- 每日自动备份（保留最近 7 天） ---------- */
+const SNAP='zhuiguang_snap_';
+function autoBackupDaily(){
+  if(DEMO) return;
+  try{
+    const k=SNAP+today().replace(/-/g,'');
+    if(!localStorage.getItem(k)) localStorage.setItem(k, JSON.stringify(S));
+    // 只保留最近 7 份
+    const keys=[];
+    for(let i=0;i<localStorage.length;i++){
+      const key=localStorage.key(i);
+      if(key && key.indexOf(SNAP)===0) keys.push(key);
+    }
+    keys.sort();
+    while(keys.length>7){ localStorage.removeItem(keys.shift()); }
+  }catch(e){}
+}
+function snapshots(){
+  const out=[];
+  try{
+    for(let i=0;i<localStorage.length;i++){
+      const key=localStorage.key(i);
+      if(key && key.indexOf(SNAP)===0){
+        const raw=localStorage.getItem(key)||'';
+        out.push({key, date:key.slice(SNAP.length), kb:Math.round(raw.length/1024)});
+      }
+    }
+  }catch(e){}
+  return out.sort((a,b)=>b.date.localeCompare(a.date));
+}
+function restoreSnapshots(){
+  const list=snapshots();
+  if(!list.length){ toast('还没有自动备份'); return; }
+  openSheet(`<h2>从自动备份恢复</h2>
+    <div class="mut" style="margin-bottom:8px">每天首次打开会自动存一份，保留最近 7 天。</div>
+    ${list.map(s=>`<button class="btn ghost" style="margin-top:8px" onclick="confirmRestore('${s.key}')">
+      ${s.date.slice(0,4)}-${s.date.slice(4,6)}-${s.date.slice(6)} · ${s.kb} KB</button>`).join('')}
+    <button class="btn ghost" style="margin-top:14px" onclick="closeSheet()">取消</button>`);
+}
+function confirmRestore(key){
+  openSheet(`<h2>确认恢复</h2>
+    <div class="item">恢复会用这份备份**覆盖当前全部数据**，当前数据也会先另存一份。</div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn ghost" onclick="closeSheet()">取消</button>
+      <button class="btn" onclick="doRestore('${key}')">确认恢复</button></div>`);
+}
+function doRestore(key){
+  try{
+    const raw=localStorage.getItem(key);
+    if(!raw){ toast('备份已丢失'); return; }
+    localStorage.setItem(SNAP+'before', JSON.stringify(S));
+    const data=JSON.parse(raw);
+    localStorage.setItem(KEY, raw);
+    localStorage.setItem(BAK, raw);
+    closeSheet();
+    load(); render();
+    toast('已恢复 '+key.slice(SNAP.length).slice(0,4)+'-'+key.slice(SNAP.length).slice(4,6)+'-'+key.slice(SNAP.length).slice(6));
+  }catch(e){ toast('恢复失败：'+e.message); }
+}
+
 function save(){
   if(DEMO) return;                 // 演示模式改动只留在内存
   try{
@@ -364,18 +447,29 @@ function addStudy(sec){ if(sec<=0) return; const k=today();
   S.study[k]=(S.study[k]||0)+Math.round(sec); }
 function studyMin(k){ return Math.round((S.study[k]||0)/60); }
 function stat(key){ S.stats[key]=(S.stats[key]||0)+1; }
-const ACHIEVEMENTS=[
-  {id:'first_checkin', name:'初识追光', icon:'✧', desc:'完成第一次打卡', need:1, cur:()=>Object.keys(S.days).length},
-  {id:'week_streak',   name:'七日之约', icon:'☀', desc:'连续打卡 7 天', need:7, cur:()=>streakDays()},
-  {id:'month_checkin', name:'月度守望', icon:'☾', desc:'累计打卡 30 天', need:30, cur:()=>Object.keys(S.days).length},
-  {id:'all_people',    name:'十二星辰', icon:'✦', desc:'读完全部 12 位人物', need:DATA.people.length, cur:()=>S.read.length},
-  {id:'quiz_150',      name:'百题斩',   icon:'⚔', desc:'累计答题 150 道', need:150, cur:()=>S.stats.answered||0},
-  {id:'daily_full',    name:'满分时刻', icon:'❖', desc:'每日一测拿到 3/3', need:3, cur:()=>bestDaily()},
-  {id:'wrong_clear',   name:'错题克星', icon:'✎', desc:'错题重练一局 3 题全对', need:3, cur:()=>bestWrongRun()},
-  {id:'challenge_ace', name:'挑战达人', icon:'⚡', desc:'限时挑战单局 10 分以上', need:10, cur:()=>S.stats.chBest||0},
-  {id:'notes_5',       name:'笔耕不辍', icon:'✉', desc:'写下 5 条打卡心得', need:5, cur:()=>noteCount()},
-  {id:'study_5h',      name:'专注时光', icon:'♫', desc:'累计学习满 5 小时', need:18000, cur:()=>studyTotal()}
-];
+const ACH_META = (() => {
+  try { return JSON.parse(document.getElementById('achMeta').textContent).achievements; }
+  catch(e){ return []; }
+})();
+/* 判定逻辑仍写在代码里，展示信息（名称/图标/说明/目标值）来自 JSON */
+const ACH_PROGRESS = {
+  first_checkin: {cur:()=>Object.keys(S.days).length, need:1},
+  week_streak:   {cur:()=>streakDays(), need:7},
+  month_checkin: {cur:()=>Object.keys(S.days).length, need:30},
+  all_people:    {cur:()=>S.read.length, need:DATA.people.length},
+  quiz_150:      {cur:()=>S.stats.answered||0, need:150},
+  daily_full:    {cur:()=>bestDaily(), need:3},
+  wrong_clear:   {cur:()=>bestWrongRun(), need:3},
+  challenge_ace: {cur:()=>S.stats.chBest||0, need:10},
+  notes_5:       {cur:()=>noteCount(), need:5},
+  study_5h:      {cur:()=>studyTotal(), need:18000}
+};
+const ACHIEVEMENTS = ACH_META.map(m => {
+  const p = ACH_PROGRESS[m.id];
+  if(!p) return null;
+  return {id:m.id, name:m.name, icon:m.icon, desc:m.desc, need:m.target||p.need, cur:p.cur};
+}).filter(Boolean);
+
 function streakDays(){
   let n=0; const d=new Date();
   while(S.days[dayKey(d)]!==undefined){ n++; d.setDate(d.getDate()-1); }
@@ -676,7 +770,7 @@ function pageCheckin(){
       <div class="c"><b>${longest}</b><span>最长连续</span></div>
     </div>
     <div class="card"><div class="sec" style="margin-top:0">${m+1} 月打卡日历</div><div class="cal">${cal}</div></div>
-    ${cands.length?`<button class="btn ghost" onclick="pickMakeup()">补签打卡（消耗 20 分 / 天）</button>`:''}
+    ${cands.length?`<button class="btn ghost" onclick="pickMakeup()">${makeupLabel()}</button>`:''}
     <div class="foot">打卡数据保存在本机浏览器，不上传任何服务器。</div>`;
 }
 function makeupCandidates(){
@@ -699,15 +793,28 @@ function saveCheckin(){
   S.days[today()]=note; addPoints(10); save(); closeSheet(); toast('打卡成功，积分 +10'); render();
 }
 function pickMakeup(){
+  ensureMakeupCard();
   const c=makeupCandidates();
-  openSheet(`<h2>补签打卡</h2><div class="mut">每次消耗 20 分，当前 ${S.points} 分</div>
-    ${c.map(d=>`<button class="btn ghost" style="margin-top:10px" onclick="doMakeup('${d}')">补签 ${d}</button>`).join('')}
+  const hasCard=(S.cards||0)>0;
+  openSheet(`<h2>补签打卡</h2>
+    <div class="mut">免费补签卡 ×${S.cards||0}（每月发 1 张，最多存 2 张）· 当前 ${S.points} 分</div>
+    ${c.map(d=>`<div class="item" style="margin-top:8px"><b>${d}</b>
+      <div class="row" style="margin-top:8px">
+        ${hasCard?`<button class="btn" onclick="doMakeup('${d}',true)">用补签卡</button>`:''}
+        <button class="btn ghost" onclick="doMakeup('${d}',false)">扣 20 分补签</button></div></div>`).join('')}
     <button class="btn ghost" style="margin-top:14px" onclick="closeSheet()">取消</button>`);
 }
-function doMakeup(day){
-  if(S.points<20){ toast('积分不足 20 分'); return; }
+function doMakeup(day, useCard){
   if(S.days[day]!==undefined){ toast('该日期已打卡'); return; }
-  S.days[day]=''; S.points-=20; save(); closeSheet(); toast('补签成功：'+day); render();
+  if(useCard){
+    ensureMakeupCard();
+    if((S.cards||0)<=0){ toast('没有补签卡了'); return; }
+    S.cards=(S.cards||0)-1;
+    S.days[day]=''; save(); closeSheet(); toast('已用补签卡补签：'+day); render();
+    return;
+  }
+  if(S.points<20){ toast('积分不足 20 分'); return; }
+  S.days[day]=''; S.points-=20; save(); closeSheet(); toast('补签成功（-20 分）：'+day); render();
 }
 
 /* ---------- 我的 ---------- */
@@ -728,7 +835,8 @@ function pageProfile(){
     const done=S.cat[today()+'_'+i]!==undefined;
     return `<button class="btn ${done?'gray':'ghost'}" style="font-size:.78em;padding:12px 4px"
       onclick="startQuiz('cat',${i})">${n}${done?' 已练':''}</button>`; }).join('');
-  const chN=S.challenge[today()]||0;
+  const chPts=S.challengePts[today()]||0;
+  const chFull=chPts>=20;
   return `${demoBar}<div class="hero">
       <span class="badge">${badgeName()}</span>
       <div class="num">${p}<small>分</small></div>
@@ -747,8 +855,8 @@ function pageProfile(){
     </div>
     <div class="row" style="margin-top:10px">${cats}</div>
     <div class="row" style="margin-top:10px">
-      <button class="btn ${chN>=3?'gray':''}" onclick="startChallenge()">
-        ${chN>=3?'限时挑战 · 已满':'限时挑战 60 秒'}</button>
+      <button class="btn" onclick="startChallenge()">
+        ${chFull?'限时挑战 · 积分已满':'限时挑战 60 秒'}</button>
       <button class="btn ghost" onclick="openSearch()">搜索内容</button>
     </div>
     <div class="row" style="margin-top:10px">
@@ -810,12 +918,15 @@ function pageProfile(){
       <button class="btn ghost" onclick="openFocus()">专注学习模式 · 星空</button>
       <button class="btn ghost" onclick="askClearAll()">清空本地数据</button>
     </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn ghost" onclick="restoreSnapshots()">从自动备份恢复</button>
+    </div>
     ${(S.meta&&S.meta.gap>=5)?`<div class="item" style="margin-top:12px;border-color:#FFD8A8;background:#FFF8EC">
       <b>已经 ${S.meta.gap} 天没打开了</b><br>
       <span class="mut">iOS / Safari 会清理长期不用的网站数据，建议现在导出一份备份。</span></div>`:''}
 
     <div style="margin-top:14px"><button class="btn ghost" onclick="openAbout()">关于 · 作者与声明</button></div>
-    <div class="foot">追光者 · 科技青年志 v5.4（Web 版）<br>作者：高乐文 · 长治学院 物理系 · 光电信息科学与工程<br>
+    <div class="foot">追光者 · 科技青年志 v5.5（Web 版）<br>作者：高乐文 · 长治学院 物理系 · 光电信息科学与工程<br>
       内容来源：人民日报、北大新闻网、中国科学报等公开报道</div>`;
 }
 /* ---------- 热力图 ---------- */
@@ -1021,15 +1132,20 @@ function answerChallenge(i){
 function finishChallenge(){
   if(CH.finished) return;
   CH.finished=true; CH.lock=false; clearInterval(CH.timer);
-  const t=today(); const n=S.challenge[t]||0;
-  let gained=0, counted=false;
-  if(n<3){ S.challenge[t]=n+1; gained=CH.score*2; addPoints(gained); counted=true; }
+  const t=today();
+  const usedPts=S.challengePts[t]||0;
+  const room=Math.max(0, 20-usedPts);
+  const gained=Math.min(CH.score*2, room);
+  S.challenge[t]=(S.challenge[t]||0)+1;
+  if(gained>0){ S.challengePts[t]=usedPts+gained; addPoints(gained); }
   S.stats.chBest=Math.max(S.stats.chBest||0, CH.score);
   save();
   openSheet(`<div class="result"><b>${CH.score}</b>
       <span>${CH.score>=15?'追光如飞':(CH.score>=8?'表现不错':'再练练手')}</span></div>
-    <div class="mut" style="text-align:center">60 秒答对 ${CH.score} 题 · ${counted?'积分 +'+gained:'本局积分 +0'}<br>
-      当前 ${S.points} 分 · ${badgeName()}${counted?'':'<br>今天已完成 '+n+'/3 局计分，后续对局不计积分（明天可再得）'}</div>
+    <div class="mut" style="text-align:center">60 秒答对 ${CH.score} 题 · 本局积分 +${gained}<br>
+      当前 ${S.points} 分 · ${badgeName()}<br>${(S.challengePts[t]||0) >= 20
+        ? '今日挑战积分已满 20 分，后续对局只记录得分'
+        : '今日挑战积分 '+(S.challengePts[t]||0)+' / 20 分'}</div>
     <div class="row" style="margin-top:14px">
       <button class="btn ghost" onclick="closeSheet();render()">完成</button>
       <button class="btn" onclick="closeSheet();startChallenge()">再来一局</button></div>`);
@@ -1346,7 +1462,8 @@ function openAbout(){
       v5.1 Web 版：iOS 适配（分享面板导出、跨天自动刷新、热力图可点、启动图）<br>
       v5.2 Web 版：题库扩到 150 题、错题按遗忘曲线复习、学习时长统计、全站搜索可看解析、每日提醒、首屏拆包加速<br>
       v5.3 Web 版：演示模式、清空本地数据、专注学习模式（星空+10 种实时合成白噪声）、答题音效与震动、自动备份、照片与启动图压缩<br>
-      v5.4 Web 版：成就徽章系统（10 个徽章与进度）、挑战最高分记录</div>
+      v5.4 Web 版：成就徽章系统（10 个徽章与进度）、挑战最高分记录<br>
+      v5.5 Web 版：免费补签卡、每日自动备份与恢复、成就信息改由 JSON 驱动</div>
     <button class="btn ghost" onclick="closeSheet()">知道了</button>`);
 }
 
@@ -1478,7 +1595,7 @@ function makeReport(){
     });
   }
   c.fillStyle='#9AA4B8'; c.font='26px sans-serif';
-  c.fillText('生成于 '+today()+' · 追光者 v5.4 Web',60,1560);
+  c.fillText('生成于 '+today()+' · 追光者 v5.5 Web',60,1560);
   downloadCanvas(cv,'追光者学习报告_'+today()+'.png');
 }
 
@@ -1533,6 +1650,7 @@ setInterval(function(){
 studyStart();
 stat('launch'); save();
 markOpen();
+autoBackupDaily();
 checkAchievements();
 
 /* ---------- 照片拆包：先渲染界面，照片后到再补渲染一次 ---------- */
