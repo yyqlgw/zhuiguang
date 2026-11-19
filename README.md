@@ -1,4 +1,4 @@
-[Uploading README.md…]()
+[README.md](https://github.com/user-attachments/files/35092200/README.md)
 <div align="center">
 
 # 追光者 · 科技青年志
@@ -14,17 +14,6 @@
 ![Offline](https://img.shields.io/badge/offline-%E6%97%A0%E9%9C%80%E7%BD%91%E7%BB%9C-2ea44f?style=flat-square)
 ![Size](https://img.shields.io/badge/site-2.9%20MB-lightgrey?style=flat-square)
 ![Deps](https://img.shields.io/badge/dependencies-none-f89820?style=flat-square)
-
-<br>
-
-<table>
-<tr>
-<td align="center"><img src="docs/screenshots/01-cards.jpg" width="170"><br><sub><b>人物卡牌</b><br>12 位科技工作者</sub></td>
-<td align="center"><img src="docs/screenshots/03-checkin.jpg" width="170"><br><sub><b>打卡日历</b><br>连续 / 累计 / 热力图</sub></td>
-<td align="center"><img src="docs/screenshots/04-quiz.jpg" width="170"><br><sub><b>答题与解析</b><br>150 道题库</sub></td>
-<td align="center"><img src="docs/screenshots/05-focus.jpg" width="170"><br><sub><b>专注学习</b><br>星空 + 白噪声</sub></td>
-</tr>
-</table>
 
 </div>
 
